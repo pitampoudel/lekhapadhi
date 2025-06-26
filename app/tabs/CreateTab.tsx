@@ -1,94 +1,123 @@
 "use client";
-import React, { useState } from "react";
-import { FileTextIcon, UserIcon, ArrowLeftIcon } from "lucide-react";
+import React, {useState} from "react";
+import {FileTextIcon, UserIcon} from "lucide-react";
 import DocumentTypeSelector from '../components/DocumentTypeSelector';
 import SifarisForm from '../components/SifarisForm';
 import PDFPreview from '../components/PDFPreview';
+import Stepper, {Step} from '../components/Stepper';
 
 export default function CreateTab() {
-    // State for generate functionality
     const [sifarisType, setSifarisType] = useState('');
     const [formData, setFormData] = useState<any>(null);
-    const [showPreview, setShowPreview] = useState(false);
+    const [currentStep, setCurrentStep] = useState(0);
+
+    const steps: Step[] = [
+        {
+            id: 'select-type',
+            title: 'प्रकार छान्नुहोस्',
+            description: 'सिफारिसको प्रकार'
+        },
+        {
+            id: 'fill-form',
+            title: 'विवरण भर्नुहोस्',
+            description: 'आवश्यक जानकारी'
+        },
+        {
+            id: 'preview',
+            title: 'प्रिभ्यू',
+            description: 'कागजात हेर्नुहोस्'
+        }
+    ];
 
     // Handlers for generate functionality
     const handleTypeChange = (type: string) => {
         setSifarisType(type);
         setFormData(null);
-        setShowPreview(false);
+        if (type) {
+            setCurrentStep(1); // Move to form step when type is selected
+        }
     };
 
     const handleFormSubmit = (data: any) => {
         setFormData(data);
-        setShowPreview(true);
+        setCurrentStep(2); // Move to preview step when form is submitted
+    };
+
+    const handleStepClick = (stepIndex: number) => {
+        // Only allow going back to previous steps
+        if (stepIndex < currentStep) {
+            setCurrentStep(stepIndex);
+        }
     };
 
     return (
         <div className="bg-theme-card rounded-xl shadow-md p-8 max-w-6xl mx-auto">
-            <div className="flex items-center justify-center mb-10">
-                <div className="bg-theme-primary-600 bg-opacity-10 p-4 rounded-full mr-4">
-                    <FileTextIcon className="w-7 h-7 text-theme-primary-600"/>
-                </div>
-                <h2 className="text-3xl font-extrabold text-theme-gray-900 drop-shadow-sm">सिफारिस पत्र तयार गर्नुहोस्</h2>
+            {/* Stepper */}
+            <div className="mb-8">
+                <Stepper
+                    steps={steps}
+                    currentStep={currentStep}
+                    onStepClick={handleStepClick}
+                />
             </div>
 
             {/* Step-based UI */}
             <div className="mb-10">
-                {sifarisType && !showPreview && (
-                    <button 
-                        onClick={() => handleTypeChange('')}
-                        className="flex items-center text-theme-primary-600 hover:text-theme-primary-800 mb-6 transition-colors"
-                    >
-                        <ArrowLeftIcon className="w-4 h-4 mr-2" />
-                        <span>फिर्ता जानुहोस्</span>
-                    </button>
-                )}
-
-                {!sifarisType ? (
+                {currentStep === 0 && (
                     <div className="max-w-4xl mx-auto">
                         <DocumentTypeSelector
                             selectedType={sifarisType}
                             onTypeChange={handleTypeChange}
                         />
                     </div>
-                ) : (
-                    <div className={`grid ${showPreview ? 'grid-cols-1 lg:grid-cols-3 gap-8' : 'grid-cols-1'}`}>
-                        {/* Form Section */}
-                        <div className={`bg-theme-card p-6 rounded-xl border border-theme-gray-300 h-fit shadow-sm ${showPreview ? 'lg:col-span-1' : 'w-full max-w-2xl mx-auto'}`}>
+                )}
+
+                {currentStep === 1 && (
+                    <div className="w-full max-w-2xl mx-auto">
+                        <div className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 shadow-sm">
                             <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
-                                <UserIcon className="w-6 h-6 text-theme-primary-600 mr-3" />
+                                <UserIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
                                 आवेदन विवरण भर्नुहोस्
                             </h3>
-                            {!showPreview ? (
-                                <SifarisForm
-                                    sifarisType={sifarisType}
-                                    onFormSubmit={handleFormSubmit}
-                                />
-                            ) : (
-                                <div className="mt-4">
-                                    <button
-                                        onClick={() => setShowPreview(false)}
-                                        className="py-3 px-4 bg-theme-primary-600 hover:bg-theme-primary-700 text-white font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary-600 focus:ring-offset-2 transition-colors w-full"
-                                    >
-                                        फारम सम्पादन गर्नुहोस्
-                                    </button>
-                                </div>
-                            )}
+                            <SifarisForm
+                                sifarisType={sifarisType}
+                                onFormSubmit={handleFormSubmit}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {currentStep === 2 && formData && (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Form Edit Section */}
+                        <div
+                            className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 h-fit shadow-sm lg:col-span-1">
+                            <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
+                                <UserIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
+                                आवेदन विवरण
+                            </h3>
+                            <div className="mt-4">
+                                <button
+                                    onClick={() => setCurrentStep(1)}
+                                    className="py-3 px-4 bg-theme-primary-600 hover:bg-theme-primary-700 text-white font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary-600 focus:ring-offset-2 transition-colors w-full"
+                                >
+                                    फारम सम्पादन गर्नुहोस्
+                                </button>
+                            </div>
                         </div>
 
                         {/* PDF Preview Section */}
-                        {showPreview && formData && (
-                            <div className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 lg:col-span-2 shadow-sm">
-                                <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
-                                    <FileTextIcon className="w-6 h-6 text-theme-primary-600 mr-3" />
-                                    कागजात प्रिभ्यू
-                                </h3>
-                                <PDFPreview
-                                    docType={sifarisType}
-                                    formData={formData}
-                                />
-                            </div>
-                        )}
+                        <div
+                            className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 lg:col-span-2 shadow-sm">
+                            <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
+                                <FileTextIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
+                                कागजात प्रिभ्यू
+                            </h3>
+                            <PDFPreview
+                                docType={sifarisType}
+                                formData={formData}
+                            />
+                        </div>
                     </div>
                 )}
             </div>
