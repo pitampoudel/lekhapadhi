@@ -8,7 +8,7 @@ const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}) 
         <>
             {icon}
             <span className={`${active ? 'font-medium' : ''}`}>{label}</span>
-            {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-theme-primary-600 rounded-r-md"></div>}
+            {active && <div className="absolute inset-y-0 -left-3 w-1.5 bg-theme-primary-600 rounded-r-md"></div>}
         </>
     );
 

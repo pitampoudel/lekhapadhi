@@ -31,7 +31,7 @@ export default function Card({title, value, icon, trend, color = 'blue'}: CardPr
     };
 
     return (
-        <div className={`${colorClasses[color]} p-6 rounded-lg border shadow-sm transition-transform hover:scale-105`}>
+        <div className={`${colorClasses[color]} p-6 rounded-lg border shadow-sm transition-transform`}>
             <div className="flex justify-between items-start mb-4">
                 <h3 className="text-sm font-medium text-theme-gray-600">{title}</h3>
                 {icon}
