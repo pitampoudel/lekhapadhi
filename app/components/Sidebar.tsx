@@ -60,7 +60,7 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
             <h2 className="text-2xl font-bold mb-8 text-theme-primary-600">
                 <Link href="/" className="flex items-center">
                     <span className="text-3xl mr-2">📝</span>
-                    <span>लेखापडी</span>
+                    <span>लेखापढी</span>
                 </Link>
             </h2>
             <nav className="flex flex-col gap-2 flex-grow">

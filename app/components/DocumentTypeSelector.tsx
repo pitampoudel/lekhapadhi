@@ -1,11 +1,37 @@
 import React from "react";
-import { FileTextIcon, CheckCircleIcon } from "lucide-react";
-import { sifarisTypes } from "./SifarisTypeDropdown";
+import {CheckCircleIcon, FileTextIcon} from "lucide-react";
 
 interface DocumentTypeSelectorProps {
   selectedType: string;
   onTypeChange: (type: string) => void;
 }
+export const types = [
+    {
+        id: "citizenship",
+        name: "नागरिकता सिफारिस",
+        englishName: "Citizenship Recommendation",
+    },
+    {
+        id: "birth",
+        name: "जन्मदर्ता सिफारिस",
+        englishName: "Birth Registration",
+    },
+    {
+        id: "residence",
+        name: "बसोबास प्रमाण पत्र",
+        englishName: "Residence Certificate",
+    },
+    {
+        id: "marriage",
+        name: "विवाह प्रमाणिकरण",
+        englishName: "Marriage Verification",
+    },
+    {
+        id: "relationship",
+        name: "नाता प्रमाणिकरण",
+        englishName: "Relationship Verification",
+    },
+];
 
 const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
   selectedType,
@@ -21,7 +47,7 @@ const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {sifarisTypes.map((type) => (
+        {types.map((type) => (
           <div
             key={type.id}
             onClick={() => onTypeChange(type.id)}

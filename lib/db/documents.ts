@@ -15,3 +15,9 @@ export async function getDocumentsByUser(userEmail: string): Promise<Document[]>
         .sort({createdAt: -1})
         .toArray();
 }
+
+export async function createDocument(document: Document): Promise<Document> {
+    const collection = await getCollection();
+    const result = await collection.insertOne(document);
+    return {...document, _id: result.insertedId.toString()};
+}

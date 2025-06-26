@@ -84,7 +84,7 @@ export default function CreateTab() {
                                     कागजात प्रिभ्यू
                                 </h3>
                                 <PDFPreview
-                                    sifarisType={sifarisType}
+                                    docType={sifarisType}
                                     formData={formData}
                                 />
                             </div>
@@ -95,4 +95,3 @@ export default function CreateTab() {
         </div>
     );
 }
-
