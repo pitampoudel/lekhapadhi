@@ -1,38 +1,17 @@
 import React from "react";
 import {CheckCircleIcon, FileTextIcon} from "lucide-react";
+import {docTypes} from "@/app/config/data";
 
 interface DocumentTypeSelectorProps {
     selectedType: string;
     onTypeChange: (type: string) => void;
 }
 
-export const types = [
-    {
-        id: "citizenship",
-        name: "नागरिकता सिफारिस"
-    },
-    {
-        id: "birth",
-        name: "जन्मदर्ता सिफारिस"
-    },
-    {
-        id: "residence",
-        name: "बसोबास प्रमाण पत्र"
-    },
-    {
-        id: "marriage",
-        name: "विवाह प्रमाणिकरण"
-    },
-    {
-        id: "relationship",
-        name: "नाता प्रमाणिकरण"
-    },
-];
 
-const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({selectedType, onTypeChange,}) => {
+const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({selectedType, onTypeChange}) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {types.map((type) => (
+            {docTypes.map((type) => (
                 <div
                     key={type.id}
                     onClick={() => onTypeChange(type.id)}

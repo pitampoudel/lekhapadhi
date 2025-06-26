@@ -1,20 +1,26 @@
 "use client";
 import React, {useCallback, useState} from "react";
-import {UserIcon} from "lucide-react";
-import DocumentTypeSelector, {types} from './DocumentTypeSelector';
-import DynamicForm from './DynamicForm';
+import {UserIcon, XIcon} from "lucide-react";
+import DocumentTypeSelector from './DocumentTypeSelector';
+import DynamicForm, {CreateDocFormData} from './DynamicForm';
 import Stepper, {Step} from '../components/input/Stepper';
 import {getFieldsByType} from "./formFields";
 import PreviewDoc from "@/app/create/PreviewDoc";
+import {useRouter} from "next/navigation";
+import {docTypes} from "@/app/config/data";
 
-export type CreateDocFormData = Record<string, string | number>;
 
-export default function CreatePage() {
-    const [docType, setDocType] = useState<string>('');
+export default function CreateDocPage() {
+    const router = useRouter();
+    const [docTypeId, setDocTypeId] = useState<string>('');
     const [formData, setFormData] = useState<CreateDocFormData | null>(null);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const handleClose = () => {
+        router.push('/');
+    };
 
     // Define steps for the form process
     const steps: Step[] = [
@@ -36,11 +42,11 @@ export default function CreatePage() {
     ];
 
     // Get the selected document type details
-    const selectedDocType = types.find(typ => typ.id === docType);
+    const selectedDocType = docTypes.find(typ => typ.id === docTypeId);
 
     // Handler for document type selection
     const handleTypeChange = useCallback((type: string) => {
-        setDocType(type);
+        setDocTypeId(type);
         setFormData(null);
         setFormErrors([]);
         if (type) {
@@ -55,7 +61,7 @@ export default function CreatePage() {
 
         try {
             // Validate required fields
-            const fields = getFieldsByType(docType);
+            const fields = getFieldsByType(docTypeId);
             const requiredFields = fields.filter(field => field.required);
             const missingFields = requiredFields.filter(field => !data[field.id]);
 
@@ -73,29 +79,33 @@ export default function CreatePage() {
         } finally {
             setIsSubmitting(false);
         }
-    }, [docType]);
+    }, [docTypeId]);
 
     // Handler for step navigation
     const handleStepClick = useCallback((stepIndex: number) => {
         // Only allow going back to previous steps or to the next step if current step is complete
         if (stepIndex < currentStep ||
             (stepIndex === currentStep + 1 &&
-                ((currentStep === 0 && docType) ||
+                ((currentStep === 0 && docTypeId) ||
                     (currentStep === 1 && formData)))) {
             setCurrentStep(stepIndex);
         }
-    }, [currentStep, docType, formData]);
+    }, [currentStep, docTypeId, formData]);
 
 
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center p-4 md:p-8">
-            <div className="w-full max-w-4xl">
-                <h1 className="text-2xl md:text-3xl font-bold text-theme-gray-900 mb-6 text-center">
-                    कागजात सिर्जना गर्नुहोस्
-                </h1>
+        <div className="min-h-screen flex flex-col justify-center items-center p-4 md:p-8 relative">
+            <button
+                onClick={handleClose}
+                className="absolute top-4 right-4 p-2 rounded-full text-theme-gray-700 hover:text-theme-gray-900  transition-all focus:outline-none focus:ring-2 focus:ring-theme-primary-600 cursor-pointer"
+                aria-label="Close form"
+            >
+                <XIcon className="w-6 h-6"/>
+            </button>
 
+            <div className="w-full max-w-4xl">
                 {/* Stepper */}
-                <div className="mb-10" role="navigation" aria-label="Form steps">
+                <div className="mb-16" role="navigation" aria-label="Form steps">
                     <Stepper
                         steps={steps}
                         currentStep={currentStep}
@@ -122,7 +132,7 @@ export default function CreatePage() {
                     {currentStep === 0 && (
                         <div className="w-full">
                             <DocumentTypeSelector
-                                selectedType={docType}
+                                selectedType={docTypeId}
                                 onTypeChange={handleTypeChange}
                             />
                         </div>
@@ -136,7 +146,7 @@ export default function CreatePage() {
                                 {selectedDocType ? `${selectedDocType.name} - आवेदन विवरण` : 'आवेदन विवरण भर्नुहोस्'}
                             </h2>
                             <DynamicForm
-                                type={docType}
+                                type={docTypeId}
                                 onFormSubmit={handleFormSubmit}
                                 isSubmitting={isSubmitting}
                                 initialData={formData}

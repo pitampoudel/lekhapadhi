@@ -54,7 +54,7 @@ export const commonFields: FormField[] = [
   }
 ];
 
-// Specific fields for each Sifaris type
+// Specific fields for each type
 export const citizenshipFields: FormField[] = [
   ...commonFields,
   {
@@ -176,18 +176,17 @@ export const relationshipFields: FormField[] = [
   }
 ];
 
-// Get fields based on Sifaris type
 export const getFieldsByType = (type: string): FormField[] => {
   switch (type) {
-    case 'citizenship':
+    case 'citizenship-sifaris':
       return citizenshipFields;
-    case 'birth':
+    case "birth-sifaris":
       return birthRegistrationFields;
-    case 'residence':
+    case "residence-sifaris":
       return residenceFields;
-    case 'marriage':
+    case "marriage-sifaris":
       return marriageFields;
-    case 'relationship':
+    case "relationship-certificate-sifaris":
       return relationshipFields;
     default:
       return commonFields;
