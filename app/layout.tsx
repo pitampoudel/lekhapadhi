@@ -16,12 +16,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: "लेखापढी",
-    description: "Create official Nepali सिफारिस पत्र online.",
+    description: "Create official Nepali documents online.",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+export default function RootLayout({children}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
