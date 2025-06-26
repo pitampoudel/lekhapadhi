@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {CheckCircleIcon, ChevronRightIcon, ClockIcon, FileTextIcon} from "lucide-react";
 import Card from "../components/Card";
 import {Document} from "@/lib/types/document";
-import {DocumentRow, DocumentsHeader} from "@/app/tabs/DocumentsTab";
+import {DocumentRow, DocumentsHeader} from "@/app/tabs/components";
 
 type OverviewTabProps = {
     setActiveTab: (tab: string) => void;
