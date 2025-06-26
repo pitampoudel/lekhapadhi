@@ -3,7 +3,7 @@ import {FileIcon, FileTextIcon, HomeIcon, LogOutIcon, UserIcon} from "lucide-rea
 import React from "react";
 import {signOut} from "next-auth/react";
 
-const NavItem = ({icon, label, onClick, href, active = false}) => {
+const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}) => {
     const content = (
         <>
             {icon}
@@ -16,28 +16,40 @@ const NavItem = ({icon, label, onClick, href, active = false}) => {
         active ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'
     }`;
 
+    const handleClick = (e) => {
+        if (onClick) onClick(e);
+        if (closeMobileMenu) closeMobileMenu();
+    };
+
     if (href) {
         return (
-            <Link href={href} className={baseClasses}>
+            <Link href={href} className={baseClasses} onClick={closeMobileMenu}>
                 {content}
             </Link>
         );
     }
 
     return (
-        <button onClick={onClick} className={baseClasses}>
+        <button onClick={handleClick} className={baseClasses}>
             {content}
         </button>
     );
 };
 
-export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab}: {
+export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMobileMenuOpen}: {
     mobileMenuOpen: boolean,
     activeTab: string,
-    setActiveTab: (string) => void
+    setActiveTab: (string) => void,
+    setMobileMenuOpen?: (boolean) => void
 }) {
     const handleLogout = async () => {
-        await signOut({callbackUrl: '/'});
+        await signOut();
+    };
+
+    const closeMobileMenu = () => {
+        if (setMobileMenuOpen) {
+            setMobileMenuOpen(false);
+        }
     };
     return <aside className={`
                 fixed top-0 left-0 h-full bg-white shadow-lg z-20 transition-transform duration-300 ease-in-out
@@ -48,7 +60,7 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab}: {
             <h2 className="text-2xl font-bold mb-8 text-blue-800">
                 <Link href="/" className="flex items-center">
                     <span className="text-3xl mr-2">📝</span>
-                    <span>लेखापाडी</span>
+                    <span>लेखापडी</span>
                 </Link>
             </h2>
             <nav className="flex flex-col gap-2 flex-grow">
@@ -57,40 +69,45 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab}: {
                     label="Dashboard"
                     onClick={() => {
                         setActiveTab("overview");
-                        setMobileMenuOpen(false);
                     }}
-                    active={activeTab === "overview"} href={undefined}/>
+                    active={activeTab === "overview"} 
+                    href={undefined}
+                    closeMobileMenu={closeMobileMenu}/>
                 <NavItem
                     icon={<FileTextIcon className="w-5 h-5"/>}
-                    label="My Requests"
+                    label="My Documents"
                     onClick={() => {
-                        setActiveTab("requests");
-                        setMobileMenuOpen(false);
+                        setActiveTab("documents");
                     }}
-                    active={activeTab === "requests"} href={undefined}/>
+                    active={activeTab === "documents"}
+                    href={undefined}
+                    closeMobileMenu={closeMobileMenu}/>
                 <NavItem
                     icon={<FileIcon className="w-5 h-5"/>}
-                    label="New Application"
+                    label="New Document"
                     onClick={() => {
-                        setActiveTab("generate");
-                        setMobileMenuOpen(false);
+                        setActiveTab("create");
                     }}
-                    active={activeTab === "generate"}
-                    href={undefined}/>
+                    active={activeTab === "create"}
+                    href={undefined}
+                    closeMobileMenu={closeMobileMenu}/>
                 <NavItem
                     icon={<UserIcon className="w-5 h-5"/>}
                     label="Profile"
                     onClick={() => {
                         setActiveTab("profile");
-                        setMobileMenuOpen(false);
                     }}
-                    active={activeTab === "profile"} href={undefined}/>
+                    active={activeTab === "profile"} 
+                    href={undefined}
+                    closeMobileMenu={closeMobileMenu}/>
 
                 <div className="mt-4 pt-4 border-t border-gray-200">
                     <NavItem
                         icon={<LogOutIcon className="w-5 h-5 text-red-500"/>}
                         label="Logout"
-                        onClick={handleLogout} href={undefined}/>
+                        onClick={handleLogout} 
+                        href={undefined}
+                        closeMobileMenu={closeMobileMenu}/>
                 </div>
             </nav>
         </div>

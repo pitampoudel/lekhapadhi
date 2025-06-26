@@ -11,15 +11,12 @@ import {
     CheckCircleIcon,
     ChevronRightIcon,
     ClockIcon,
-    FileIcon,
     FileTextIcon,
-    HomeIcon,
-    LogOutIcon,
     MenuIcon,
     UserIcon,
     XIcon
 } from "lucide-react";
-import {signOut, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import Sidebar from "@/app/components/Sidebar";
 
 export default function Dashboard() {
@@ -46,11 +43,10 @@ export default function Dashboard() {
     // Check for tab query parameter
     useEffect(() => {
         const tab = searchParams.get('tab');
-        if (tab && ['overview', 'requests', 'generate', 'profile'].includes(tab)) {
+        if (tab && ['overview', 'documents', 'create', 'profile'].includes(tab)) {
             setActiveTab(tab);
         }
     }, [searchParams]);
-
 
 
     // Handlers for generate functionality
@@ -91,7 +87,7 @@ export default function Dashboard() {
             )}
 
 
-            <Sidebar mobileMenuOpen={mobileMenuOpen} activeTab={activeTab}/>
+            <Sidebar mobileMenuOpen={mobileMenuOpen} activeTab={activeTab} setActiveTab={setActiveTab} setMobileMenuOpen={setMobileMenuOpen}/>
             {/* Main Content */}
             <main className="flex-1 p-6 pt-16 md:pt-6 overflow-y-auto h-screen">
                 <header className="bg-white rounded-lg shadow-sm p-4 mb-6 flex justify-between items-center">
@@ -232,9 +228,9 @@ export default function Dashboard() {
                     </>
                 )}
 
-                {activeTab === "requests" && (
+                {activeTab === "documents" && (
                     <div className="bg-white rounded-lg shadow-sm p-6">
-                        <h2 className="text-lg font-bold mb-4">My Requests</h2>
+                        <h2 className="text-lg font-bold mb-4">My Documents</h2>
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
@@ -388,7 +384,7 @@ export default function Dashboard() {
                     </div>
                 )}
 
-                {activeTab === "generate" && (
+                {activeTab === "create" && (
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <div className="flex items-center justify-center mb-6">
                             <div className="bg-blue-100 p-3 rounded-full mr-3">
