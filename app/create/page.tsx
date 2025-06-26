@@ -1,16 +1,22 @@
 "use client";
-import React, {useState} from "react";
-import {FileTextIcon, UserIcon} from "lucide-react";
-import DocumentTypeSelector from './DocumentTypeSelector';
-import SifarisForm from './SifarisForm';
-import PDFPreview from './PDFPreview';
-import Stepper, {Step} from './Stepper';
+import React, {useCallback, useState} from "react";
+import {UserIcon} from "lucide-react";
+import DocumentTypeSelector, {types} from './DocumentTypeSelector';
+import DynamicForm from './DynamicForm';
+import Stepper, {Step} from '../components/input/Stepper';
+import {getFieldsByType} from "./formFields";
+import PreviewDoc from "@/app/create/PreviewDoc";
+
+export type CreateDocFormData = Record<string, string | number>;
 
 export default function CreatePage() {
-    const [sifarisType, setSifarisType] = useState('');
-    const [formData, setFormData] = useState<any>(null);
-    const [currentStep, setCurrentStep] = useState(0);
+    const [docType, setDocType] = useState<string>('');
+    const [formData, setFormData] = useState<CreateDocFormData | null>(null);
+    const [currentStep, setCurrentStep] = useState<number>(0);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [formErrors, setFormErrors] = useState<string[]>([]);
 
+    // Define steps for the form process
     const steps: Step[] = [
         {
             id: 'select-type',
@@ -29,97 +35,125 @@ export default function CreatePage() {
         }
     ];
 
-    // Handlers for generate functionality
-    const handleTypeChange = (type: string) => {
-        setSifarisType(type);
+    // Get the selected document type details
+    const selectedDocType = types.find(typ => typ.id === docType);
+
+    // Handler for document type selection
+    const handleTypeChange = useCallback((type: string) => {
+        setDocType(type);
         setFormData(null);
+        setFormErrors([]);
         if (type) {
             setCurrentStep(1); // Move to form step when type is selected
         }
-    };
+    }, []);
 
-    const handleFormSubmit = (data: any) => {
-        setFormData(data);
-        setCurrentStep(2); // Move to preview step when form is submitted
-    };
+    // Handler for form submission
+    const handleFormSubmit = useCallback((data: CreateDocFormData) => {
+        setIsSubmitting(true);
+        setFormErrors([]);
 
-    const handleStepClick = (stepIndex: number) => {
-        // Only allow going back to previous steps
-        if (stepIndex < currentStep) {
+        try {
+            // Validate required fields
+            const fields = getFieldsByType(docType);
+            const requiredFields = fields.filter(field => field.required);
+            const missingFields = requiredFields.filter(field => !data[field.id]);
+
+            if (missingFields.length > 0) {
+                setFormErrors(missingFields.map(field => `${field.label} आवश्यक छ`));
+                setIsSubmitting(false);
+                return;
+            }
+
+            setFormData(data);
+            setCurrentStep(2); // Move to preview step when form is submitted
+        } catch (error) {
+            console.error('Form submission error:', error);
+            setFormErrors(['फारम पेश गर्दा त्रुटि भयो। कृपया पुन: प्रयास गर्नुहोस्।']);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }, [docType]);
+
+    // Handler for step navigation
+    const handleStepClick = useCallback((stepIndex: number) => {
+        // Only allow going back to previous steps or to the next step if current step is complete
+        if (stepIndex < currentStep ||
+            (stepIndex === currentStep + 1 &&
+                ((currentStep === 0 && docType) ||
+                    (currentStep === 1 && formData)))) {
             setCurrentStep(stepIndex);
         }
-    };
+    }, [currentStep, docType, formData]);
+
 
     return (
-        <div className="bg-theme-card rounded-xl shadow-md p-8 max-w-6xl mx-auto my-4">
-            {/* Stepper */}
-            <div className="mb-8">
-                <Stepper
-                    steps={steps}
-                    currentStep={currentStep}
-                    onStepClick={handleStepClick}
-                />
-            </div>
+        <div className="min-h-screen flex flex-col justify-center items-center p-4 md:p-8">
+            <div className="w-full max-w-4xl">
+                <h1 className="text-2xl md:text-3xl font-bold text-theme-gray-900 mb-6 text-center">
+                    कागजात सिर्जना गर्नुहोस्
+                </h1>
 
-            {/* Step-based UI */}
-            <div className="mb-10">
-                {currentStep === 0 && (
-                    <div className="max-w-4xl mx-auto">
-                        <DocumentTypeSelector
-                            selectedType={sifarisType}
-                            onTypeChange={handleTypeChange}
-                        />
+                {/* Stepper */}
+                <div className="mb-10" role="navigation" aria-label="Form steps">
+                    <Stepper
+                        steps={steps}
+                        currentStep={currentStep}
+                        onStepClick={handleStepClick}
+                    />
+                </div>
+
+                {/* Form errors */}
+                {formErrors.length > 0 && (
+                    <div className="mb-6 p-4 bg-theme-error bg-opacity-10 border border-theme-error rounded-lg"
+                         role="alert">
+                        <h4 className="font-semibold text-theme-error mb-2">कृपया निम्न त्रुटिहरू सच्याउनुहोस्:</h4>
+                        <ul className="list-disc pl-5">
+                            {formErrors.map((error, index) => (
+                                <li key={index} className="text-theme-error">{error}</li>
+                            ))}
+                        </ul>
                     </div>
                 )}
 
-                {currentStep === 1 && (
-                    <div className="w-full max-w-2xl mx-auto">
-                        <div className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 shadow-sm">
-                            <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
-                                <UserIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
-                                आवेदन विवरण भर्नुहोस्
-                            </h3>
-                            <SifarisForm
-                                sifarisType={sifarisType}
-                                onFormSubmit={handleFormSubmit}
+                {/* Step-based UI */}
+                <div className="w-full flex justify-center mt-2">
+                    {/* Step 1: Document Type Selection */}
+                    {currentStep === 0 && (
+                        <div className="w-full">
+                            <DocumentTypeSelector
+                                selectedType={docType}
+                                onTypeChange={handleTypeChange}
                             />
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {currentStep === 2 && formData && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Form Edit Section */}
-                        <div
-                            className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 h-fit shadow-sm lg:col-span-1">
-                            <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
+                    {/* Step 2: Form Filling */}
+                    {currentStep === 1 && (
+                        <div className="w-full max-w-2xl">
+                            <h2 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center">
                                 <UserIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
-                                आवेदन विवरण
-                            </h3>
-                            <div className="mt-4">
-                                <button
-                                    onClick={() => setCurrentStep(1)}
-                                    className="py-3 px-4 bg-theme-primary-600 hover:bg-theme-primary-700 text-white font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary-600 focus:ring-offset-2 transition-colors w-full"
-                                >
-                                    फारम सम्पादन गर्नुहोस्
-                                </button>
-                            </div>
+                                {selectedDocType ? `${selectedDocType.name} - आवेदन विवरण` : 'आवेदन विवरण भर्नुहोस्'}
+                            </h2>
+                            <DynamicForm
+                                type={docType}
+                                onFormSubmit={handleFormSubmit}
+                                isSubmitting={isSubmitting}
+                                initialData={formData}
+                            />
                         </div>
+                    )}
 
-                        {/* PDF Preview Section */}
-                        <div
-                            className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 lg:col-span-2 shadow-sm">
-                            <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
-                                <FileTextIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
-                                कागजात प्रिभ्यू
-                            </h3>
-                            <PDFPreview
-                                docType={sifarisType}
+                    {/* Step 3: Preview */}
+                    {currentStep === 2 && formData && (
+                        <div className="w-full">
+                            <PreviewDoc
+                                selectedDocType={selectedDocType}
                                 formData={formData}
                             />
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );

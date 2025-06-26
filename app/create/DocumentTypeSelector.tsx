@@ -9,35 +9,27 @@ interface DocumentTypeSelectorProps {
 export const types = [
     {
         id: "citizenship",
-        name: "नागरिकता सिफारिस",
-        englishName: "Citizenship Recommendation",
+        name: "नागरिकता सिफारिस"
     },
     {
         id: "birth",
-        name: "जन्मदर्ता सिफारिस",
-        englishName: "Birth Registration",
+        name: "जन्मदर्ता सिफारिस"
     },
     {
         id: "residence",
-        name: "बसोबास प्रमाण पत्र",
-        englishName: "Residence Certificate",
+        name: "बसोबास प्रमाण पत्र"
     },
     {
         id: "marriage",
-        name: "विवाह प्रमाणिकरण",
-        englishName: "Marriage Verification",
+        name: "विवाह प्रमाणिकरण"
     },
     {
         id: "relationship",
-        name: "नाता प्रमाणिकरण",
-        englishName: "Relationship Verification",
+        name: "नाता प्रमाणिकरण"
     },
 ];
 
-const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
-                                                                       selectedType,
-                                                                       onTypeChange,
-                                                                   }) => {
+const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({selectedType, onTypeChange,}) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {types.map((type) => (
@@ -63,9 +55,6 @@ const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
                         <h4 className="text-lg font-medium text-theme-gray-900 mb-1">
                             {type.name}
                         </h4>
-                        <p className="text-sm text-theme-gray-600">
-                            {type.englishName}
-                        </p>
                     </div>
                 </div>
             ))}
