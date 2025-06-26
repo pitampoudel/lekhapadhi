@@ -10,12 +10,13 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
+    "core-js": "^3.43.0",
     "nepali-date-converter": "^3.4.0",
     "next": "15.3.4",
+    "pdf-lib": "^1.17.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.58.1",
-    "react-to-pdf": "^2.0.1",
     "yup": "^1.6.1"
   },
   "devDependencies": {
