@@ -14,12 +14,12 @@ export default function Header() {
         else setGreeting("Good evening");
     }, []);
 
-    return <header className="bg-theme-white rounded-lg shadow-sm p-4 mb-6 flex justify-between items-center">
-        <div>
-            <h1 className="text-xl font-semibold text-theme-gray-800">
+    return <header className="bg-theme-primary-700 shadow-sm flex justify-between items-center">
+        <div className="px-4 py-3">
+            <h1 className="text-xl font-semibold text-theme-white">
                 {greeting}, {user?.name || 'Guest'}
             </h1>
-            <p className="text-sm text-theme-gray-600">
+            <p className="text-sm text-theme-white opacity-80">
                 {new Date().toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -28,10 +28,10 @@ export default function Header() {
                 })}
             </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 px-4 py-3">
             <div className="relative">
                 <BellIcon
-                    className="cursor-pointer w-6 h-6 text-theme-gray-600 hover:text-theme-primary-600 transition-colors"/>
+                    className="cursor-pointer w-6 h-6 text-theme-white hover:text-primary-200 transition-colors"/>
                 <span
                     className="absolute -top-1 -right-1 bg-red-500 text-theme-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                             2
@@ -47,7 +47,7 @@ export default function Header() {
                 />
             ) : (
                 <span
-                    className="hidden md:inline text-sm font-medium">
+                    className="hidden md:inline text-sm font-medium text-theme-white">
                     {user?.name ? user.name.split(' ')[0] : 'Login'}
                 </span>
             )}

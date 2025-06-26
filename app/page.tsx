@@ -54,13 +54,15 @@ export default function Dashboard() {
             />
 
             {/* Main Content */}
-            <main className="flex-1 p-6 pt-16 md:pt-6 overflow-y-auto h-screen">
+            <main className="flex-1 overflow-y-auto h-screen">
                 <Header/>
-                {/* Dashboard Content */}
-                {activeTab === "dashboard" && <DashboardTab setActiveTab={setActiveTab}/>}
-                {activeTab === "documents" && <DocumentsTab/>}
-                {activeTab === "create" && <CreateTab/>}
-                {activeTab === "profile" && <ProfileTab user={user}/>}
+                <div className="px-6 mt-6">
+                    {/* Dashboard Content */}
+                    {activeTab === "dashboard" && <DashboardTab setActiveTab={setActiveTab}/>}
+                    {activeTab === "documents" && <DocumentsTab/>}
+                    {activeTab === "create" && <CreateTab/>}
+                    {activeTab === "profile" && <ProfileTab user={user}/>}
+                </div>
             </main>
         </div>
     );
