@@ -1,5 +1,4 @@
 'use client';
-
 import React, {useState} from 'react';
 import SifarisTypeDropdown from '../components/SifarisTypeDropdown';
 import SifarisForm from '../components/SifarisForm';

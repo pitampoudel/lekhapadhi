@@ -1,5 +1,7 @@
 "use client";
-
+import Link from "next/link";
+import Image from "next/image";
+import camel from "../public/camel.jpg";
 import { useState } from "react";
 import {
   BellIcon,
@@ -30,11 +32,9 @@ export default function Dashboard() {
           >
             <FileTextIcon className="w-5 h-5" /> My Requests
           </button>
-          <button
-            onClick={() => setActiveTab("apply")}
-            className="cursor-pointer flex items-center gap-2 text-left"
-          >
-            <FileTextIcon className="w-5 h-5" /> New Application
+          <button className="cursor-pointer flex items-center gap-2 text-left">
+            <FileTextIcon className="w-5 h-5" />
+            <Link href="/generate">New Application</Link>
           </button>
           <button
             onClick={() => setActiveTab("profile")}
@@ -56,8 +56,14 @@ export default function Dashboard() {
         <header className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-semibold">Welcome, User</h1>
           <div className="flex items-center gap-4">
-            <BellIcon className="cursor-pointer w-6 h-6 text-gray-500" />
-            <div className="bg-gray-200 rounded-full w-8 h-8"></div>
+            <BellIcon className="relative cursor-pointer w-6 h-6 text-gray-500" />
+            <div className="cursor-pointer bg-gray-200 rounded-full w-8 h-8">
+              <Image
+                className="rounded-full"
+                src={camel}
+                alt="ProfilePic"
+              ></Image>
+            </div>
           </div>
         </header>
 
