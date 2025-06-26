@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# लेखापाडी (Lekhapadi)
 
-## Getting Started
+लेखापाडी एक वेब एप्लिकेशन हो जसले नेपाली भाषामा सरकारी शैलीको सिफारिस पत्रहरू (सिफारिस) उत्पन्न गर्दछ। यसले प्रयोगकर्तालाई फारम फिल्डहरू भर्न र प्रिन्ट-रेडी नेपाली PDF पत्र उत्पन्न गर्न अनुमति दिन्छ।
 
-First, run the development server:
+## विशेषताहरू
 
+- विभिन्न सिफारिस प्रकारहरू छनौट गर्न ड्रपडाउन मेनु:
+  - नागरिकता सिफारिस
+  - जन्मदर्ता सिफारिस
+  - बसोबास प्रमाण पत्र
+  - विवाह प्रमाणिकरण
+  - नाता प्रमाणिकरण
+
+- छनौट गरिएको प्रकारको आधारमा स्वचालित रूपमा उत्पन्न फारम फिल्डहरू
+- फारम भेलिडेशन
+- नेपाली मितिमा आजको मिति प्रदर्शन
+- सरकारी शैलीको लेटरहेड फर्म्याटिङ
+- PDF डाउनलोड र प्रिन्ट विकल्पहरू
+- पूर्ण नेपाली UI
+
+## प्रयोग गर्ने तरिका
+
+1. ड्रपडाउन मेनुबाट सिफारिस प्रकार छनौट गर्नुहोस्
+2. फारममा आवश्यक जानकारी भर्नुहोस्
+3. "सिफारिस तयार गर्नुहोस्" बटनमा क्लिक गर्नुहोस्
+4. उत्पन्न सिफारिस पत्र हेर्नुहोस्
+5. PDF डाउनलोड गर्न वा प्रिन्ट गर्न सम्बन्धित बटनहरू प्रयोग गर्नुहोस्
+
+## स्थानीय रूपमा चलाउने
+
+यो प्रोजेक्ट [Next.js](https://nextjs.org) मा आधारित छ। स्थानीय रूपमा चलाउनको लागि:
+
+1. रिपोजिटरी क्लोन गर्नुहोस्:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/lekhapadi.git
+cd lekhapadi
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. आवश्यक प्याकेजहरू इन्स्टल गर्नुहोस्:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. डेभलपमेन्ट सर्भर चलाउनुहोस्:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. आफ्नो ब्राउजरमा [http://localhost:3000](http://localhost:3000) खोल्नुहोस्
 
-## Learn More
+## प्रयोग गरिएका प्रविधिहरू
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js](https://nextjs.org) - React फ्रेमवर्क
+- [React Hook Form](https://react-hook-form.com) - फारम ह्यान्डलिङ
+- [Yup](https://github.com/jquense/yup) - फारम भेलिडेशन
+- [React-to-PDF](https://www.npmjs.com/package/react-to-pdf) - PDF जेनेरेशन
+- [Nepali Date Converter](https://www.npmjs.com/package/nepali-date-converter) - नेपाली मिति रूपान्तरण
+- [TailwindCSS](https://tailwindcss.com) - स्टाइलिङ
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## थिम सिस्टम
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+यस एप्लिकेशनमा एक समग्र थिम सिस्टम प्रयोग गरिएको छ जसले सबै रङहरूलाई केन्द्रीय रूपमा परिभाषित गर्दछ। यसले डार्क मोड समर्थन र भविष्यमा थिम परिवर्तन गर्न सजिलो बनाउँछ।
 
-## Deploy on Vercel
+### थिम भेरिएबलहरू
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+थिम भेरिएबलहरू `app/globals.css` मा परिभाषित गरिएका छन्:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **आधारभूत रङहरू**: `--background`, `--foreground`
+- **प्राथमिक रङहरू**: `--primary-50` देखि `--primary-900` सम्म
+- **ग्रे रङहरू**: `--gray-50` देखि `--gray-900` सम्म
+- **सफलता रङहरू**: `--success-50` देखि `--success-900` सम्म
+- **त्रुटि रङहरू**: `--error-50` देखि `--error-900` सम्म
+- **कम्पोनेन्ट विशिष्ट रङहरू**: `--header-bg`, `--footer-bg`, `--button-primary-bg`, आदि
+
+### थिम क्लासहरू
+
+हार्डकोडेड रङहरू प्रयोग नगर्नका लागि, निम्न थिम क्लासहरू प्रयोग गर्नुहोस्:
+
+- `bg-theme-primary-600` - प्राथमिक बटनहरूको लागि
+- `bg-theme-success-600` - सफलता बटनहरूको लागि
+- `bg-theme-gray-600` - सेकेन्डरी बटनहरूको लागि
+- `text-theme-white` - सेतो पाठको लागि
+- `text-theme-error` - त्रुटि सन्देशहरूको लागि
+- `border-theme-gray-300` - फारम इनपुटहरूको लागि
+
+### थिम अपडेट गर्ने
+
+नयाँ रङहरू थप्न वा विद्यमान रङहरू परिवर्तन गर्न:
+
+1. `app/globals.css` मा नयाँ CSS भेरिएबलहरू थप्नुहोस्
+2. आवश्यक भएमा नयाँ थिम क्लासहरू थप्नुहोस्
+3. कम्पोनेन्टहरूमा हार्डकोडेड रङहरू प्रयोग नगर्नुहोस्, सधैं थिम भेरिएबलहरू वा थिम क्लासहरू प्रयोग गर्नुहोस्

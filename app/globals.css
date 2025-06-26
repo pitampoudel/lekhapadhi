@@ -1,8 +1,73 @@
 @import "tailwindcss";
+@import "./print.css";
 
 :root {
+  /* Base colors */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Primary colors */
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+  --primary-200: #bfdbfe;
+  --primary-300: #93c5fd;
+  --primary-400: #60a5fa;
+  --primary-500: #3b82f6;
+  --primary-600: #2563eb;
+  --primary-700: #1d4ed8;
+  --primary-800: #1e40af;
+  --primary-900: #1e3a8a;
+
+  /* Gray colors */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Success colors */
+  --success-50: #f0fdf4;
+  --success-100: #dcfce7;
+  --success-200: #bbf7d0;
+  --success-300: #86efac;
+  --success-400: #4ade80;
+  --success-500: #22c55e;
+  --success-600: #16a34a;
+  --success-700: #15803d;
+  --success-800: #166534;
+  --success-900: #14532d;
+
+  /* Error colors */
+  --error-50: #fef2f2;
+  --error-100: #fee2e2;
+  --error-200: #fecaca;
+  --error-300: #fca5a5;
+  --error-400: #f87171;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+  --error-700: #b91c1c;
+  --error-800: #991b1b;
+  --error-900: #7f1d1d;
+
+  /* Component specific */
+  --header-bg: var(--primary-700);
+  --footer-bg: var(--gray-800);
+  --button-primary-bg: var(--primary-600);
+  --button-primary-hover: var(--primary-700);
+  --button-success-bg: var(--success-600);
+  --button-success-hover: var(--success-700);
+  --button-secondary-bg: var(--gray-600);
+  --button-secondary-hover: var(--gray-700);
+  --form-border: var(--gray-300);
+  --form-focus-ring: var(--primary-500);
+  --form-focus-border: var(--primary-500);
+  --error-text: var(--error-500);
+  --card-bg: var(--background);
 }
 
 @theme inline {
@@ -16,6 +81,12 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    /* Adjust component colors for dark mode */
+    --header-bg: var(--primary-900);
+    --footer-bg: var(--gray-900);
+    --card-bg: var(--gray-800);
+    --form-border: var(--gray-600);
   }
 }
 
@@ -23,4 +94,73 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom theme classes */
+.bg-theme-gray-50 {
+  background-color: var(--gray-50);
+}
+
+.bg-theme-gray-100 {
+  background-color: var(--gray-100);
+}
+
+.bg-theme-gray-600 {
+  background-color: var(--button-secondary-bg);
+}
+
+.hover\:bg-theme-gray-700:hover {
+  background-color: var(--button-secondary-hover);
+}
+
+.bg-theme-gray-800 {
+  background-color: var(--footer-bg);
+}
+
+.bg-theme-primary-700 {
+  background-color: var(--header-bg);
+}
+
+.bg-theme-white {
+  background-color: var(--card-bg);
+}
+
+.text-theme-white {
+  color: var(--background);
+}
+
+.focus\:ring-theme-primary:focus {
+  --tw-ring-color: var(--form-focus-ring);
+}
+
+.focus\:ring-theme-gray:focus {
+  --tw-ring-color: var(--gray-500);
+}
+
+.text-theme-error {
+  color: var(--error-text);
+}
+
+.bg-theme-success-600 {
+  background-color: var(--button-success-bg);
+}
+
+.hover\:bg-theme-success-700:hover {
+  background-color: var(--button-success-hover);
+}
+
+.bg-theme-primary-600 {
+  background-color: var(--button-primary-bg);
+}
+
+.hover\:bg-theme-primary-700:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.border-theme-gray-300 {
+  border-color: var(--form-border);
+}
+
+.focus\:border-theme-primary:focus {
+  border-color: var(--form-focus-border);
 }
