@@ -14,12 +14,12 @@ export default function Header() {
         else setGreeting("Good evening");
     }, []);
 
-    return <header className="bg-white rounded-lg shadow-sm p-4 mb-6 flex justify-between items-center">
+    return <header className="bg-theme-white rounded-lg shadow-sm p-4 mb-6 flex justify-between items-center">
         <div>
-            <h1 className="text-xl font-semibold text-gray-800">
+            <h1 className="text-xl font-semibold text-theme-gray-800">
                 {greeting}, {user?.name || 'Guest'}
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-theme-gray-600">
                 {new Date().toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -31,33 +31,26 @@ export default function Header() {
         <div className="flex items-center gap-4">
             <div className="relative">
                 <BellIcon
-                    className="cursor-pointer w-6 h-6 text-gray-600 hover:text-blue-600 transition-colors"/>
+                    className="cursor-pointer w-6 h-6 text-theme-gray-600 hover:text-theme-primary-600 transition-colors"/>
                 <span
-                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    className="absolute -top-1 -right-1 bg-red-500 text-theme-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                             2
                         </span>
             </div>
-            <div
-                className="cursor-pointer flex items-center gap-2 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full py-1 px-3">
-                <div
-                    className="w-8 h-8 rounded-full overflow-hidden bg-gray-300 flex items-center justify-center">
-                    {user?.image ? (
-                        <Image
-                            width={32}
-                            height={32}
-                            className="rounded-full"
-                            src={user.image}
-                            alt="Profile"
-                        />
-                    ) : (
-                        <></>
-                    )}
-                </div>
+            {user?.image ? (
+                <Image
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                    src={user.image}
+                    alt="Profile"
+                />
+            ) : (
                 <span
                     className="hidden md:inline text-sm font-medium">
                     {user?.name ? user.name.split(' ')[0] : 'Login'}
                 </span>
-            </div>
+            )}
         </div>
     </header>
 }

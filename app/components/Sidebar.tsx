@@ -8,12 +8,12 @@ const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}) 
         <>
             {icon}
             <span className={`${active ? 'font-medium' : ''}`}>{label}</span>
-            {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600 rounded-r-md"></div>}
+            {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-theme-primary-600 rounded-r-md"></div>}
         </>
     );
 
     const baseClasses = `relative cursor-pointer flex items-center gap-3 py-2 px-3 rounded-md text-left transition-colors ${
-        active ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'
+        active ? 'bg-theme-primary-600 bg-opacity-10 text-theme-primary-600' : 'text-theme-gray-600 hover:bg-theme-gray-100'
     }`;
 
     const handleClick = (e) => {
@@ -52,12 +52,12 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
         }
     };
     return <aside className={`
-                fixed top-0 left-0 h-full bg-white shadow-lg z-20 transition-transform duration-300 ease-in-out
+                fixed top-0 left-0 h-full bg-theme-white shadow-lg z-20 transition-transform duration-300 ease-in-out
                 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
                 md:translate-x-0 md:static md:w-64 md:z-0 md:flex-shrink-0 md:h-screen overflow-y-hidden
             `}>
         <div className="p-6 h-full flex flex-col">
-            <h2 className="text-2xl font-bold mb-8 text-blue-800">
+            <h2 className="text-2xl font-bold mb-8 text-theme-primary-600">
                 <Link href="/" className="flex items-center">
                     <span className="text-3xl mr-2">📝</span>
                     <span>लेखापडी</span>
@@ -101,9 +101,9 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
                     href={undefined}
                     closeMobileMenu={closeMobileMenu}/>
 
-                <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="mt-4 pt-4 border-t border-theme-gray-300">
                     <NavItem
-                        icon={<LogOutIcon className="w-5 h-5 text-red-500"/>}
+                        icon={<LogOutIcon className="w-5 h-5 text-theme-error"/>}
                         label="Logout"
                         onClick={handleLogout} 
                         href={undefined}
