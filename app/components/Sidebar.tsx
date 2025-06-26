@@ -2,6 +2,7 @@ import Link from "next/link";
 import {FileIcon, FileTextIcon, HomeIcon, LogOutIcon, UserIcon} from "lucide-react";
 import React from "react";
 import {signOut} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}) => {
     const content = (
@@ -42,6 +43,8 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
     setActiveTab: (arg0: string) => void,
     setMobileMenuOpen?: (arg0: boolean) => void
 }) {
+    const router = useRouter();
+
     const handleLogout = async () => {
         await signOut();
     };
@@ -86,7 +89,7 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
                     icon={<FileIcon className="w-5 h-5"/>}
                     label="Create"
                     onClick={() => {
-                        setActiveTab("create");
+                        router.push("/create");
                     }}
                     active={activeTab === "create"}
                     href={undefined}
@@ -97,7 +100,7 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
                     onClick={() => {
                         setActiveTab("profile");
                     }}
-                    active={activeTab === "profile"} 
+                    active={activeTab === "profile"}
                     href={undefined}
                     closeMobileMenu={closeMobileMenu}/>
 
@@ -105,7 +108,7 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
                     <NavItem
                         icon={<LogOutIcon className="w-5 h-5 text-theme-error"/>}
                         label="Logout"
-                        onClick={handleLogout} 
+                        onClick={handleLogout}
                         href={undefined}
                         closeMobileMenu={closeMobileMenu}/>
                 </div>
@@ -113,4 +116,3 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
         </div>
     </aside>
 }
-

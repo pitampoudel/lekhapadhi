@@ -1,12 +1,12 @@
 "use client";
 import React, {useState} from "react";
 import {FileTextIcon, UserIcon} from "lucide-react";
-import DocumentTypeSelector from '../components/DocumentTypeSelector';
-import SifarisForm from '../components/SifarisForm';
-import PDFPreview from '../components/PDFPreview';
-import Stepper, {Step} from '../components/Stepper';
+import DocumentTypeSelector from './DocumentTypeSelector';
+import SifarisForm from './SifarisForm';
+import PDFPreview from './PDFPreview';
+import Stepper, {Step} from './Stepper';
 
-export default function CreateTab() {
+export default function CreatePage() {
     const [sifarisType, setSifarisType] = useState('');
     const [formData, setFormData] = useState<any>(null);
     const [currentStep, setCurrentStep] = useState(0);
@@ -51,7 +51,7 @@ export default function CreateTab() {
     };
 
     return (
-        <div className="bg-theme-card rounded-xl shadow-md p-8 max-w-6xl mx-auto">
+        <div className="bg-theme-card rounded-xl shadow-md p-8 max-w-6xl mx-auto my-4">
             {/* Stepper */}
             <div className="mb-8">
                 <Stepper

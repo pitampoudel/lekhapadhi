@@ -2,24 +2,19 @@
 import React, {useEffect, useState} from "react";
 import {useSearchParams} from 'next/navigation';
 import {MenuIcon, XIcon} from "lucide-react";
-import {useSession} from "next-auth/react";
 import Header from "@/app/components/Header";
 import Sidebar from "@/app/components/Sidebar";
 import DashboardTab from "@/app/tabs/DashboardTab";
 import DocumentsTab from "@/app/tabs/DocumentsTab";
 import ProfileTab from "@/app/tabs/ProfileTab";
-import CreateTab from "@/app/tabs/CreateTab";
 
 export default function Dashboard() {
-    const {data: session} = useSession();
-    const user = session?.user;
     const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState("dashboard");
 
-    // Check for tab query parameter
     useEffect(() => {
         const tab = searchParams.get('tab');
-        if (tab && ['dashboard', 'documents', 'create', 'profile'].includes(tab)) {
+        if (tab && ['dashboard', 'documents', 'profile'].includes(tab)) {
             setActiveTab(tab);
         }
     }, [searchParams]);
@@ -60,8 +55,7 @@ export default function Dashboard() {
                     {/* Dashboard Content */}
                     {activeTab === "dashboard" && <DashboardTab setActiveTab={setActiveTab}/>}
                     {activeTab === "documents" && <DocumentsTab/>}
-                    {activeTab === "create" && <CreateTab/>}
-                    {activeTab === "profile" && <ProfileTab user={user}/>}
+                    {activeTab === "profile" && <ProfileTab/>}
                 </div>
             </main>
         </div>
