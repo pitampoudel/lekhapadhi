@@ -46,10 +46,10 @@ export const commonFields: FormField[] = [
     required: true
   },
   {
-    id: 'reason',
-    label: 'सिफारिसको कारण',
+    id: 'additionalDetails',
+    label: 'अतिरिक्त निर्देशन',
     type: 'textarea',
-    placeholder: 'सिफारिसको कारण लेख्नुहोस्',
+    placeholder: 'अतिरिक्त निर्देशन लेख्नुहोस्',
     required: true
   }
 ];

@@ -1,61 +1,110 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
+import { useState } from "react";
+import {
+  BellIcon,
+  HomeIcon,
+  UserIcon,
+  FileTextIcon,
+  LogOutIcon,
+} from "lucide-react";
 
-export default function Home() {
-    return (
-        <div className="min-h-screen flex flex-col">
-            <header className="bg-theme-primary-700 text-theme-white p-6 shadow-md">
-                <div className="max-w-6xl mx-auto">
-                    <h1 className="text-3xl font-bold text-center">लेखापाडी</h1>
-                    <p className="text-center mt-2">सरकारी सिफारिस पत्र जेनेरेटर</p>
-                </div>
-            </header>
+export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState("overview");
 
-            <main className="flex-grow max-w-6xl mx-auto p-6 md:p-8 w-full">
-                <div className="bg-theme-white rounded-lg shadow-md p-6 mb-8">
-                    <h2 className="text-2xl font-bold mb-6 text-center">लेखापाडीमा स्वागत छ</h2>
+  return (
+    <div className="min-h-screen flex bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-lg p-6 hidden md:block">
+        <h2 className="cursor-pointer text-2xl font-bold mb-6">लेखापाडी</h2>
+        <nav className="flex flex-col gap-4">
+          <button
+            onClick={() => setActiveTab("overview")}
+            className="cursor-pointer flex items-center gap-2 text-left"
+          >
+            <HomeIcon className="w-5 h-5" /> Dashboard
+          </button>
+          <button
+            onClick={() => setActiveTab("requests")}
+            className="cursor-pointer flex items-center gap-2 text-left"
+          >
+            <FileTextIcon className="w-5 h-5" /> My Requests
+          </button>
+          <button
+            onClick={() => setActiveTab("apply")}
+            className="cursor-pointer flex items-center gap-2 text-left"
+          >
+            <FileTextIcon className="w-5 h-5" /> New Application
+          </button>
+          <button
+            onClick={() => setActiveTab("profile")}
+            className="cursor-pointer flex items-center gap-2 text-left"
+          >
+            <UserIcon className="w-5 h-5" /> Profile
+          </button>
+          <button
+            onClick={() => alert("Logging out...")}
+            className="cursor-pointer flex items-center gap-2 text-left text-red-600"
+          >
+            <LogOutIcon className="cursor-pointer w-5 h-5" /> Logout
+          </button>
+        </nav>
+      </aside>
 
-                    <div className="text-center mb-8">
-                        <p className="text-lg mb-4">
-                            लेखापाडी एक सरल र सहज सरकारी सिफारिस पत्र जेनेरेटर हो। यसले विभिन्न प्रकारका सिफारिस पत्रहरू सजिलै तयार गर्न मद्दत गर्दछ।
-                        </p>
-                        <p className="text-lg mb-6">
-                            सिफारिस पत्र तयार गर्न तलको बटनमा क्लिक गर्नुहोस्।
-                        </p>
+      {/* Main Content */}
+      <main className="flex-1 p-6">
+        <header className="flex justify-between items-center mb-6">
+          <h1 className="text-xl font-semibold">Welcome, User</h1>
+          <div className="flex items-center gap-4">
+            <BellIcon className="cursor-pointer w-6 h-6 text-gray-500" />
+            <div className="bg-gray-200 rounded-full w-8 h-8"></div>
+          </div>
+        </header>
 
-                        <Link href="/generate" className="py-3 px-6 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-white font-bold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-theme-primary focus:ring-offset-2 text-lg">
-                            सिफारिस पत्र तयार गर्नुहोस्
-                        </Link>
-                    </div>
+        {/* Dashboard Content */}
+        {activeTab === "overview" && (
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card title="Applications Submitted" value="4" />
+            <Card title="Approved" value="2" />
+            <Card title="Pending" value="1" />
+          </section>
+        )}
 
-                    <div className="mt-8 border-t pt-6">
-                        <h3 className="text-xl font-semibold mb-4 text-center">विशेषताहरू</h3>
-                        <div className="grid md:grid-cols-3 gap-6">
-                            <div className="p-4 border rounded-lg">
-                                <h4 className="font-bold mb-2">सरल प्रयोग</h4>
-                                <p>सजिलो फारम भर्नुहोस् र तुरुन्तै सिफारिस पत्र प्राप्त गर्नुहोस्</p>
-                            </div>
-                            <div className="p-4 border rounded-lg">
-                                <h4 className="font-bold mb-2">विभिन्न प्रकारका सिफारिसहरू</h4>
-                                <p>नागरिकता, स्थायी बसोबास, जन्म प्रमाणित लगायत विभिन्न सिफारिसहरू</p>
-                            </div>
-                            <div className="p-4 border rounded-lg">
-                                <h4 className="font-bold mb-2">पिडिएफ डाउनलोड</h4>
-                                <p>तयार भएको सिफारिस पत्र पिडिएफ रूपमा डाउनलोड गर्नुहोस्</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+        {activeTab === "requests" && (
+          <div>
+            <h2 className="text-lg font-bold mb-4">My Requests</h2>
+            <p>List of document requests will appear here.</p>
+          </div>
+        )}
 
-            <footer className="bg-theme-gray-800 text-theme-white p-6 mt-auto">
-                <div className="max-w-6xl mx-auto text-center">
-                    <p>© {new Date().getFullYear()} लेखापाडी - सबै अधिकार सुरक्षित</p>
-                    <p className="mt-2 text-sm">नेपाली सरकारी सिफारिस पत्र जेनेरेटर</p>
-                </div>
-            </footer>
-        </div>
-    );
+        {activeTab === "apply" && (
+          <div>
+            <h2 className="text-lg font-bold mb-4">Apply for a Document</h2>
+            <p>Application form component will go here.</p>
+          </div>
+        )}
+
+        {activeTab === "profile" && (
+          <div>
+            <h2 className="text-lg font-bold mb-4">My Profile</h2>
+            <p>Profile editing form will go here.</p>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+type CardProps = {
+  title: string;
+  value: string | number;
+};
+
+function Card({ title, value }: CardProps) {
+  return (
+    <div className="bg-white p-4 rounded-lg shadow-md">
+      <h3 className="text-sm text-gray-500">{title}</h3>
+      <p className="text-2xl font-bold">{value}</p>
+    </div>
+  );
 }
