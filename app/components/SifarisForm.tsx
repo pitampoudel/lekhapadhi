@@ -1,15 +1,18 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { FormField, getFieldsByType } from './formFields';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { FormField, getFieldsByType } from "./formFields";
 
 interface SifarisFormProps {
   sifarisType: string;
   onFormSubmit: (data: any) => void;
 }
 
-const SifarisForm: React.FC<SifarisFormProps> = ({ sifarisType, onFormSubmit }) => {
+const SifarisForm: React.FC<SifarisFormProps> = ({
+  sifarisType,
+  onFormSubmit,
+}) => {
   // Get fields based on selected Sifaris type
   const fields = getFieldsByType(sifarisType);
 
@@ -17,24 +20,34 @@ const SifarisForm: React.FC<SifarisFormProps> = ({ sifarisType, onFormSubmit }) 
   const createValidationSchema = (fields: FormField[]) => {
     const schemaFields: { [key: string]: any } = {};
 
-    fields.forEach(field => {
+    fields.forEach((field) => {
       if (field.required) {
         switch (field.type) {
-          case 'text':
-          case 'textarea':
-            schemaFields[field.id] = yup.string().required(`${field.label} आवश्यक छ`);
+          case "text":
+          case "textarea":
+            schemaFields[field.id] = yup
+              .string()
+              .required(`${field.label} आवश्यक छ`);
             break;
-          case 'number':
-            schemaFields[field.id] = yup.number().required(`${field.label} आवश्यक छ`);
+          case "number":
+            schemaFields[field.id] = yup
+              .number()
+              .required(`${field.label} आवश्यक छ`);
             break;
-          case 'date':
-            schemaFields[field.id] = yup.string().required(`${field.label} आवश्यक छ`);
+          case "date":
+            schemaFields[field.id] = yup
+              .string()
+              .required(`${field.label} आवश्यक छ`);
             break;
-          case 'select':
-            schemaFields[field.id] = yup.string().required(`${field.label} आवश्यक छ`);
+          case "select":
+            schemaFields[field.id] = yup
+              .string()
+              .required(`${field.label} आवश्यक छ`);
             break;
           default:
-            schemaFields[field.id] = yup.string().required(`${field.label} आवश्यक छ`);
+            schemaFields[field.id] = yup
+              .string()
+              .required(`${field.label} आवश्यक छ`);
         }
       }
     });
@@ -44,8 +57,12 @@ const SifarisForm: React.FC<SifarisFormProps> = ({ sifarisType, onFormSubmit }) 
 
   const validationSchema = createValidationSchema(fields);
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(validationSchema)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
   });
 
   const onSubmit = (data: any) => {
@@ -55,9 +72,9 @@ const SifarisForm: React.FC<SifarisFormProps> = ({ sifarisType, onFormSubmit }) 
   // Render form fields based on field type
   const renderField = (field: FormField) => {
     switch (field.type) {
-      case 'text':
-      case 'number':
-      case 'date':
+      case "text":
+      case "number":
+      case "date":
         return (
           <input
             type={field.type}
@@ -67,7 +84,7 @@ const SifarisForm: React.FC<SifarisFormProps> = ({ sifarisType, onFormSubmit }) 
             className="w-full p-3 border border-theme-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary"
           />
         );
-      case 'textarea':
+      case "textarea":
         return (
           <textarea
             id={field.id}
@@ -77,16 +94,22 @@ const SifarisForm: React.FC<SifarisFormProps> = ({ sifarisType, onFormSubmit }) 
             className="w-full p-3 border border-theme-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary"
           />
         );
-      case 'select':
+      case "select":
         return (
           <select
             id={field.id}
             {...register(field.id)}
             className="w-full p-3 border border-theme-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary"
           >
-            <option value="">-- छान्नुहोस् --</option>
-            {field.options?.map(option => (
-              <option key={option.value} value={option.value}>
+            <option className="text-black" value="">
+              -- छान्नुहोस् --
+            </option>
+            {field.options?.map((option) => (
+              <option
+                className="text-black"
+                key={option.value}
+                value={option.value}
+              >
                 {option.label}
               </option>
             ))}
@@ -107,14 +130,17 @@ const SifarisForm: React.FC<SifarisFormProps> = ({ sifarisType, onFormSubmit }) 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {fields.map(field => (
+      {fields.map((field) => (
         <div key={field.id} className="mb-4">
           <label htmlFor={field.id} className="block text-lg font-medium mb-2">
-            {field.label} {field.required && <span className="text-theme-error">*</span>}
+            {field.label}{" "}
+            {field.required && <span className="text-theme-error">*</span>}
           </label>
           {renderField(field)}
           {errors[field.id] && (
-            <p className="mt-1 text-theme-error">{(errors[field.id]?.message as string) || 'यो फिल्ड आवश्यक छ'}</p>
+            <p className="mt-1 text-theme-error">
+              {(errors[field.id]?.message as string) || "यो फिल्ड आवश्यक छ"}
+            </p>
           )}
         </div>
       ))}
