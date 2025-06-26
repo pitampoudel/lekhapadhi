@@ -29,8 +29,8 @@ export default function DocumentsTab() {
                                 Signed
                             </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800">
-                            <button>Download</button>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <button className="bg-theme-primary-600 hover:bg-theme-primary-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">Download</button>
                         </td>
                     </tr>
                     <tr>
@@ -44,8 +44,8 @@ export default function DocumentsTab() {
                                 Under Review
                             </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800">
-                            <button>Track</button>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <button className="bg-theme-primary-600 hover:bg-theme-primary-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">Track</button>
                         </td>
                     </tr>
                     <tr>
@@ -59,8 +59,8 @@ export default function DocumentsTab() {
                                 Signed
                             </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800">
-                            <button>Download</button>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <button className="bg-theme-primary-600 hover:bg-theme-primary-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">Download</button>
                         </td>
                     </tr>
                     <tr>
@@ -74,8 +74,8 @@ export default function DocumentsTab() {
                                 Rejected
                             </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800">
-                            <button>View Details</button>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <button className="bg-theme-primary-600 hover:bg-theme-primary-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">View Details</button>
                         </td>
                     </tr>
                     </tbody>
@@ -84,4 +84,3 @@ export default function DocumentsTab() {
         </div>
     );
 }
-

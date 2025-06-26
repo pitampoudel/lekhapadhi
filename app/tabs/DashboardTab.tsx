@@ -39,7 +39,7 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
                     <h2 className="text-lg font-semibold text-theme-gray-900">Recent Documents</h2>
                     <button
                         onClick={() => setActiveTab("documents")}
-                        className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+                        className="text-sm bg-theme-primary-600 hover:bg-theme-primary-700 text-white px-3 py-1 rounded-full flex items-center transition-colors cursor-pointer"
                     >
                         View all <ChevronRightIcon className="w-4 h-4 ml-1"/>
                     </button>
@@ -99,4 +99,3 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
         </>
     );
 }
-
