@@ -27,10 +27,10 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3">
                 <User className="w-5 h-5 text-gray-400" />
                 <div>
-                  <label className="block text-sm font-medium text-white mb-1">
+                  <label className="block text-sm font-medium text-black mb-1">
                     Full Name
                   </label>
-                  <div className="text-lg font-semibold text-white">
+                  <div className="text-lg font-semibold text-black">
                     {user?.name}
                   </div>
                 </div>
@@ -40,10 +40,10 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-gray-400" />
                 <div>
-                  <label className="block text-sm font-medium text-white mb-1">
+                  <label className="block text-sm font-medium text-black mb-1">
                     Email Address
                   </label>
-                  <div className="text-lg text-white">{user?.email}</div>
+                  <div className="text-lg text-black">{user?.email}</div>
                 </div>
               </div>
             </div>
