@@ -1,26 +1,9 @@
 'use client';
 
-import React, {useState} from 'react';
-import SifarisTypeDropdown from './components/SifarisTypeDropdown';
-import SifarisForm from './components/SifarisForm';
-import PDFPreview from './components/PDFPreview';
+import React from 'react';
+import Link from 'next/link';
 
 export default function Home() {
-    const [sifarisType, setSifarisType] = useState('');
-    const [formData, setFormData] = useState<any>(null);
-    const [showPreview, setShowPreview] = useState(false);
-
-    const handleTypeChange = (type: string) => {
-        setSifarisType(type);
-        setFormData(null);
-        setShowPreview(false);
-    };
-
-    const handleFormSubmit = (data: any) => {
-        setFormData(data);
-        setShowPreview(true);
-    };
-
     return (
         <div className="min-h-screen flex flex-col">
             <header className="bg-theme-primary-700 text-theme-white p-6 shadow-md">
@@ -32,37 +15,38 @@ export default function Home() {
 
             <main className="flex-grow max-w-6xl mx-auto p-6 md:p-8 w-full">
                 <div className="bg-theme-white rounded-lg shadow-md p-6 mb-8">
-                    <h2 className="text-2xl font-bold mb-6 text-center">सिफारिस पत्र तयार गर्नुहोस्</h2>
+                    <h2 className="text-2xl font-bold mb-6 text-center">लेखापाडीमा स्वागत छ</h2>
 
-                    <SifarisTypeDropdown
-                        selectedType={sifarisType}
-                        onTypeChange={handleTypeChange}
-                    />
+                    <div className="text-center mb-8">
+                        <p className="text-lg mb-4">
+                            लेखापाडी एक सरल र सहज सरकारी सिफारिस पत्र जेनेरेटर हो। यसले विभिन्न प्रकारका सिफारिस पत्रहरू सजिलै तयार गर्न मद्दत गर्दछ।
+                        </p>
+                        <p className="text-lg mb-6">
+                            सिफारिस पत्र तयार गर्न तलको बटनमा क्लिक गर्नुहोस्।
+                        </p>
 
-                    {sifarisType && !showPreview && (
-                        <SifarisForm
-                            sifarisType={sifarisType}
-                            onFormSubmit={handleFormSubmit}
-                        />
-                    )}
+                        <Link href="/generate" className="py-3 px-6 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-white font-bold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-theme-primary focus:ring-offset-2 text-lg">
+                            सिफारिस पत्र तयार गर्नुहोस्
+                        </Link>
+                    </div>
 
-                    {showPreview && formData && (
-                        <>
-                            <div className="mb-6">
-                                <button
-                                    onClick={() => setShowPreview(false)}
-                                    className="py-2 px-4 bg-theme-gray-600 hover:bg-theme-gray-700 text-theme-white font-bold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-gray focus:ring-offset-2"
-                                >
-                                    फारम सम्पादन गर्नुहोस्
-                                </button>
+                    <div className="mt-8 border-t pt-6">
+                        <h3 className="text-xl font-semibold mb-4 text-center">विशेषताहरू</h3>
+                        <div className="grid md:grid-cols-3 gap-6">
+                            <div className="p-4 border rounded-lg">
+                                <h4 className="font-bold mb-2">सरल प्रयोग</h4>
+                                <p>सजिलो फारम भर्नुहोस् र तुरुन्तै सिफारिस पत्र प्राप्त गर्नुहोस्</p>
                             </div>
-
-                            <PDFPreview
-                                sifarisType={sifarisType}
-                                formData={formData}
-                            />
-                        </>
-                    )}
+                            <div className="p-4 border rounded-lg">
+                                <h4 className="font-bold mb-2">विभिन्न प्रकारका सिफारिसहरू</h4>
+                                <p>नागरिकता, स्थायी बसोबास, जन्म प्रमाणित लगायत विभिन्न सिफारिसहरू</p>
+                            </div>
+                            <div className="p-4 border rounded-lg">
+                                <h4 className="font-bold mb-2">पिडिएफ डाउनलोड</h4>
+                                <p>तयार भएको सिफारिस पत्र पिडिएफ रूपमा डाउनलोड गर्नुहोस्</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
 
