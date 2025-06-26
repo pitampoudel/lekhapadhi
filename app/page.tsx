@@ -121,7 +121,7 @@ export default function Dashboard() {
             />
             <NavItem
               icon={<FileTextIcon className="w-5 h-5" />}
-              label="My Requests"
+              label="My Documents"
               onClick={() => {
                 setActiveTab("requests");
                 setMobileMenuOpen(false);
@@ -131,7 +131,7 @@ export default function Dashboard() {
             />
             <NavItem
               icon={<FileIcon className="w-5 h-5" />}
-              label="New Application"
+              label="New Document"
               href="/generate"
               onClick={undefined}
             />
@@ -207,21 +207,21 @@ export default function Dashboard() {
           <>
             <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <Card
-                title="Applications Submitted"
+                title="Document Created"
                 value="4"
                 icon={<FileTextIcon className="w-5 h-5 text-blue-500" />}
                 trend="+2 this month"
                 color="blue"
               />
               <Card
-                title="Approved"
+                title="Signed"
                 value="2"
                 icon={<CheckCircleIcon className="w-5 h-5 text-green-500" />}
                 trend="100% success rate"
                 color="green"
               />
               <Card
-                title="Pending"
+                title="Submitted"
                 value="1"
                 icon={<ClockIcon className="w-5 h-5 text-amber-500" />}
                 trend="Avg. 2 days wait time"
