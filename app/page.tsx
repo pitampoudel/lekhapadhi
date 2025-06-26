@@ -2,6 +2,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, {useEffect, useState} from "react";
+import SifarisTypeDropdown from './components/SifarisTypeDropdown';
+import SifarisForm from './components/SifarisForm';
+import PDFPreview from './components/PDFPreview';
+import {useSearchParams} from 'next/navigation';
 import {
     BellIcon,
     CheckCircleIcon,
@@ -20,10 +24,16 @@ import {signOut, useSession} from "next-auth/react";
 export default function Dashboard() {
     const {data: session} = useSession();
     const user = session?.user;
+    const searchParams = useSearchParams();
 
     const [activeTab, setActiveTab] = useState("overview");
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [greeting, setGreeting] = useState("");
+
+    // State for generate functionality
+    const [sifarisType, setSifarisType] = useState('');
+    const [formData, setFormData] = useState<any>(null);
+    const [showPreview, setShowPreview] = useState(false);
 
     useEffect(() => {
         const hour = new Date().getHours();
@@ -32,8 +42,28 @@ export default function Dashboard() {
         else setGreeting("Good evening");
     }, []);
 
+    // Check for tab query parameter
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (tab && ['overview', 'requests', 'generate', 'profile'].includes(tab)) {
+            setActiveTab(tab);
+        }
+    }, [searchParams]);
+
     const handleLogout = async () => {
         await signOut({callbackUrl: '/'});
+    };
+
+    // Handlers for generate functionality
+    const handleTypeChange = (type: string) => {
+        setSifarisType(type);
+        setFormData(null);
+        setShowPreview(false);
+    };
+
+    const handleFormSubmit = (data: any) => {
+        setFormData(data);
+        setShowPreview(true);
     };
 
     const NavItem = ({icon, label, onClick, href, active = false}) => {
@@ -92,7 +122,7 @@ export default function Dashboard() {
             <aside className={`
                 fixed top-0 left-0 h-full bg-white shadow-lg z-20 transition-transform duration-300 ease-in-out
                 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
-                md:translate-x-0 md:static md:w-64 md:z-0 md:flex-shrink-0 md:h-screen
+                md:translate-x-0 md:static md:w-64 md:z-0 md:flex-shrink-0 md:h-screen overflow-y-hidden
             `}>
                 <div className="p-6 h-full flex flex-col">
                     <h2 className="text-2xl font-bold mb-8 text-blue-800">
@@ -109,8 +139,7 @@ export default function Dashboard() {
                                 setActiveTab("overview");
                                 setMobileMenuOpen(false);
                             }}
-                            active={activeTab === "overview"}
-                        />
+                            active={activeTab === "overview"} href={undefined}/>
                         <NavItem
                             icon={<FileTextIcon className="w-5 h-5"/>}
                             label="My Requests"
@@ -122,7 +151,12 @@ export default function Dashboard() {
                         <NavItem
                             icon={<FileIcon className="w-5 h-5"/>}
                             label="New Application"
-                            href="/generate" onClick={undefined}/>
+                            onClick={() => {
+                                setActiveTab("generate");
+                                setMobileMenuOpen(false);
+                            }}
+                            active={activeTab === "generate"}
+                            href={undefined}/>
                         <NavItem
                             icon={<UserIcon className="w-5 h-5"/>}
                             label="Profile"
@@ -143,7 +177,7 @@ export default function Dashboard() {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-6 pt-16 md:pt-6">
+            <main className="flex-1 p-6 pt-16 md:pt-6 overflow-y-auto h-screen">
                 <header className="bg-white rounded-lg shadow-sm p-4 mb-6 flex justify-between items-center">
                     <div>
                         <h1 className="text-xl font-semibold text-gray-800">
@@ -435,6 +469,54 @@ export default function Dashboard() {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {activeTab === "generate" && (
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="flex items-center justify-center mb-6">
+                            <div className="bg-blue-100 p-3 rounded-full mr-3">
+                                <FileTextIcon className="w-6 h-6 text-blue-600"/>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-800">सिफारिस पत्र तयार गर्नुहोस्</h2>
+                        </div>
+
+                        <div className="mb-8">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Select Document Type</label>
+                            <SifarisTypeDropdown
+                                selectedType={sifarisType}
+                                onTypeChange={handleTypeChange}
+                            />
+                        </div>
+
+                        {sifarisType && !showPreview && (
+                            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                                <h3 className="text-lg font-medium text-gray-800 mb-4">Fill Application Details</h3>
+                                <SifarisForm
+                                    sifarisType={sifarisType}
+                                    onFormSubmit={handleFormSubmit}
+                                />
+                            </div>
+                        )}
+
+                        {showPreview && formData && (
+                            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-lg font-medium text-gray-800">Document Preview</h3>
+                                    <button
+                                        onClick={() => setShowPreview(false)}
+                                        className="py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                                    >
+                                        फारम सम्पादन गर्नुहोस्
+                                    </button>
+                                </div>
+
+                                <PDFPreview
+                                    sifarisType={sifarisType}
+                                    formData={formData}
+                                />
+                            </div>
+                        )}
                     </div>
                 )}
 
