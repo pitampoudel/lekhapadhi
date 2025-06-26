@@ -1,13 +1,39 @@
 "use client";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {CheckCircleIcon, ChevronRightIcon, ClockIcon, FileTextIcon} from "lucide-react";
 import Card from "../components/Card";
+import {Document} from "@/lib/types/document";
+import {DocumentRow, DocumentsHeader} from "@/app/tabs/DocumentsTab";
 
 type OverviewTabProps = {
     setActiveTab: (tab: string) => void;
 };
 
 export default function DashboardTab({setActiveTab}: OverviewTabProps) {
+    const [documents, setDocuments] = useState<Document[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('/api/documents');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch documents');
+                }
+                const data = await response.json();
+                setDocuments(data);
+            } catch (err) {
+                console.error('Error fetching documents:', err);
+                setError('Failed to load documents. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDocuments().then(r => console.log(r));
+    }, []);
+
     return (
         <>
             <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -44,57 +70,30 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
                         View all <ChevronRightIcon className="w-4 h-4 ml-1"/>
                     </button>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-theme-card">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-theme-gray-600 uppercase tracking-wider">Document
-                                Type
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-theme-gray-600 uppercase tracking-wider">Date</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-theme-gray-600 uppercase tracking-wider">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody className="bg-theme-card divide-y divide-gray-200">
-                        <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-gray-900">नागरिकता
-                                सिफारिस
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-theme-gray-600">2023-05-15</td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Signed
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-gray-900">जन्म
-                                दर्ता सिफारिस
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-theme-gray-600">2023-06-20</td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
-                                    Under Review
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-gray-900">चारित्रिक
-                                प्रमाणपत्र
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-theme-gray-600">2023-04-10</td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Signed
-                                </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                {loading ? (
+                    <div className="text-center py-4">
+                        <p>Loading documents...</p>
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-4 text-red-500">
+                        <p>{error}</p>
+                    </div>
+                ) : documents.length === 0 ? (
+                    <div className="text-center py-4">
+                        <p>No documents found. Create your first document from the Create tab.</p>
+                    </div>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <DocumentsHeader/>
+                            <tbody className="bg-theme-card divide-y divide-gray-200">
+                            {documents.slice(0, 3).map((document) => (
+                                <DocumentRow key={document._id} document={document}/>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </section>
         </>
     );
