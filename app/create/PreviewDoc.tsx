@@ -48,10 +48,12 @@ export default function PreviewDoc({selectedDocType, formData}: { selectedDocTyp
                         <FileTextIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
                         कागजात प्रिभ्यू
                     </h2>
-                    <PDFPreview
-                        docType={selectedDocType}
-                        formData={formData}
-                    />
+                    {selectedDocType && (
+                        <PDFPreview
+                            docType={selectedDocType.id}
+                            formData={formData}
+                        />
+                    )}
                 </div>
             </div>
         </div>
