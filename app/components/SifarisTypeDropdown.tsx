@@ -1,4 +1,6 @@
 import React from "react";
+import SelectField from "./SelectField";
+import { FileTextIcon } from "lucide-react";
 
 // Define the Sifaris types
 export const sifarisTypes = [
@@ -38,26 +40,28 @@ const SifarisTypeDropdown: React.FC<SifarisTypeDropdownProps> = ({
   selectedType,
   onTypeChange,
 }) => {
+  // Convert sifarisTypes to options format for SelectField
+  const options = sifarisTypes.map(type => ({
+    value: type.id,
+    label: `${type.name} (${type.englishName})`
+  }));
+
   return (
     <div className="mb-6">
-      <label htmlFor="sifarisType" className="block text-lg font-medium mb-2">
-        सिफारिसको प्रकार छान्नुहोस्
-      </label>
-      <select
+      <div className="flex items-center mb-2">
+        <FileTextIcon className="w-5 h-5 text-theme-primary-600 mr-2" />
+        <label htmlFor="sifarisType" className="block text-lg font-medium text-theme-gray-800">
+          सिफारिसको प्रकार छान्नुहोस्
+        </label>
+      </div>
+      <SelectField
         id="sifarisType"
+        options={options}
         value={selectedType}
-        onChange={(e) => onTypeChange(e.target.value)}
-        className="w-full p-3 border  rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary"
-      >
-        <option className="text-black" value="">
-          -- सिफारिसको प्रकार छान्नुहोस् --
-        </option>
-        {sifarisTypes.map((type) => (
-          <option className="text-black" key={type.id} value={type.id}>
-            {type.name} ({type.englishName})
-          </option>
-        ))}
-      </select>
+        onChange={onTypeChange}
+        placeholder="-- सिफारिसको प्रकार छान्नुहोस् --"
+        className="bg-theme-white"
+      />
     </div>
   );
 };

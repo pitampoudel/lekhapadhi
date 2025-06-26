@@ -57,12 +57,13 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({sifarisType, formData}) => {
     }, [sifarisType, formData]);
 
     return (
-        <div className="mt-8">
-            <h3 className="text-xl font-bold mb-4">सिफारिस पत्र प्रिभ्यू</h3>
-
+        <div className="mt-4">
             {loading && (
-                <div className="flex justify-center items-center h-96 bg-theme-gray-100 rounded-lg">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-theme-primary-700"></div>
+                <div className="flex justify-center items-center h-96 bg-gray-100 rounded-lg border border-gray-200">
+                    <div className="flex flex-col items-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+                        <p className="mt-4 text-gray-600">PDF तयार हुँदैछ...</p>
+                    </div>
                 </div>
             )}
 
@@ -73,20 +74,30 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({sifarisType, formData}) => {
             )}
 
             {!loading && !error && pdfUrl && (
-                <div className="border border-theme-gray-300 rounded-lg overflow-hidden">
-                    <div className="flex justify-between items-center p-4 bg-theme-gray-100 border-b border-theme-gray-300">
-                        <span className="font-semibold">PDF प्रिभ्यू</span>
-                        <a 
-                            href={pdfUrl} 
-                            download={`sifaris-${sifarisType}.pdf`}
-                            className="py-2 px-4 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-white font-bold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary focus:ring-offset-2"
-                        >
-                            डाउनलोड गर्नुहोस्
-                        </a>
+                <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md">
+                    <div className="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-300">
+                        <span className="font-semibold text-gray-800">PDF प्रिभ्यू</span>
+                        <div className="flex space-x-2">
+                            <a 
+                                href={pdfUrl} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                            >
+                                पूर्ण स्क्रिनमा हेर्नुहोस्
+                            </a>
+                            <a 
+                                href={pdfUrl} 
+                                download={`sifaris-${sifarisType}.pdf`}
+                                className="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                            >
+                                डाउनलोड गर्नुहोस्
+                            </a>
+                        </div>
                     </div>
                     <iframe 
                         src={pdfUrl} 
-                        className="w-full h-screen"
+                        className="w-full h-[600px]"
                         title="PDF Preview"
                     />
                 </div>
