@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {BellIcon} from "lucide-react";
 import {useSession} from "next-auth/react";
 import Image from "next/image";
+import NepaliDate from "nepali-date-converter";
 
 export default function Header() {
     const {data: session} = useSession();
@@ -20,12 +21,12 @@ export default function Header() {
                 {greeting}, {user?.name || 'Guest'}
             </h1>
             <p className="text-sm text-theme-white opacity-80">
-                {new Date().toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                })}
+                {(() => {
+                    const nepaliDate = new NepaliDate(new Date());
+                    const weekdays = ['आइतबार', 'सोमबार', 'मंगलबार', 'बुधबार', 'बिहिबार', 'शुक्रबार', 'शनिबार'];
+                    const months = ['बैशाख', 'जेठ', 'असार', 'श्रावण', 'भदौ', 'असोज', 'कार्तिक', 'मंसिर', 'पुष', 'माघ', 'फाल्गुन', 'चैत्र'];
+                    return `${weekdays[nepaliDate.getDay()]} ${nepaliDate.getDate()} ${months[nepaliDate.getMonth()]} ${nepaliDate.getYear()}`;
+                })()}
             </p>
         </div>
         <div className="flex items-center gap-4 px-4 py-3">
