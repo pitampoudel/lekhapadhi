@@ -1,32 +1,32 @@
 "use client";
 import React from "react";
-import { CheckCircleIcon, ChevronRightIcon, ClockIcon, FileTextIcon } from "lucide-react";
-import Card from "./Card";
+import {CheckCircleIcon, ChevronRightIcon, ClockIcon, FileTextIcon} from "lucide-react";
+import Card from "../components/Card";
 
 type OverviewTabProps = {
     setActiveTab: (tab: string) => void;
 };
 
-export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
+export default function DashboardTab({setActiveTab}: OverviewTabProps) {
     return (
         <>
             <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <Card
-                    title="Applications Submitted"
+                    title="Created"
                     value="4"
                     icon={<FileTextIcon className="w-5 h-5 text-blue-500"/>}
                     trend="+2 this month"
                     color="blue"
                 />
                 <Card
-                    title="Approved"
+                    title="Signed"
                     value="2"
                     icon={<CheckCircleIcon className="w-5 h-5 text-green-500"/>}
                     trend="100% success rate"
                     color="green"
                 />
                 <Card
-                    title="Pending"
+                    title="Under Review"
                     value="1"
                     icon={<ClockIcon className="w-5 h-5 text-amber-500"/>}
                     trend="Avg. 2 days wait time"
@@ -36,9 +36,9 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
 
             <section className="bg-white rounded-lg shadow-sm p-6 mb-6">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold text-gray-800">Recent Applications</h2>
+                    <h2 className="text-lg font-semibold text-gray-800">Recent Documents</h2>
                     <button
-                        onClick={() => setActiveTab("requests")}
+                        onClick={() => setActiveTab("documents")}
                         className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
                     >
                         View all <ChevronRightIcon className="w-4 h-4 ml-1"/>
@@ -64,7 +64,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <span
                                     className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Approved
+                                    Signed
                                 </span>
                             </td>
                         </tr>
@@ -76,7 +76,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <span
                                     className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
-                                    Pending
+                                    Under Review
                                 </span>
                             </td>
                         </tr>
@@ -88,7 +88,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <span
                                     className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Approved
+                                    Signed
                                 </span>
                             </td>
                         </tr>

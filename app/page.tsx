@@ -5,22 +5,21 @@ import {MenuIcon, XIcon} from "lucide-react";
 import {useSession} from "next-auth/react";
 import Header from "@/app/components/Header";
 import Sidebar from "@/app/components/Sidebar";
-import OverviewTab from "@/app/components/OverviewTab";
-import DocumentsTab from "@/app/components/DocumentsTab";
-import ProfileTab from "@/app/components/ProfileTab";
-import CreateTab from "@/app/components/CreateTab";
+import DashboardTab from "@/app/tabs/DashboardTab";
+import DocumentsTab from "@/app/tabs/DocumentsTab";
+import ProfileTab from "@/app/tabs/ProfileTab";
+import CreateTab from "@/app/tabs/CreateTab";
 
 export default function Dashboard() {
     const {data: session} = useSession();
     const user = session?.user;
     const searchParams = useSearchParams();
-
-    const [activeTab, setActiveTab] = useState("overview");
+    const [activeTab, setActiveTab] = useState("dashboard");
 
     // Check for tab query parameter
     useEffect(() => {
         const tab = searchParams.get('tab');
-        if (tab && ['overview', 'documents', 'create', 'profile'].includes(tab)) {
+        if (tab && ['dashboard', 'documents', 'create', 'profile'].includes(tab)) {
             setActiveTab(tab);
         }
     }, [searchParams]);
@@ -58,10 +57,10 @@ export default function Dashboard() {
             <main className="flex-1 p-6 pt-16 md:pt-6 overflow-y-auto h-screen">
                 <Header/>
                 {/* Dashboard Content */}
-                {activeTab === "overview" && <OverviewTab setActiveTab={setActiveTab} />}
-                {activeTab === "documents" && <DocumentsTab />}
-                {activeTab === "profile" && <ProfileTab user={user} />}
-                {activeTab === "create" && <CreateTab />}
+                {activeTab === "dashboard" && <DashboardTab setActiveTab={setActiveTab}/>}
+                {activeTab === "documents" && <DocumentsTab/>}
+                {activeTab === "create" && <CreateTab/>}
+                {activeTab === "profile" && <ProfileTab user={user}/>}
             </main>
         </div>
     );

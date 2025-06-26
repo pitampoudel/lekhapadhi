@@ -39,8 +39,8 @@ const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}) 
 export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMobileMenuOpen}: {
     mobileMenuOpen: boolean,
     activeTab: string,
-    setActiveTab: (string) => void,
-    setMobileMenuOpen?: (boolean) => void
+    setActiveTab: (arg0: string) => void,
+    setMobileMenuOpen?: (arg0: boolean) => void
 }) {
     const handleLogout = async () => {
         await signOut();
@@ -68,14 +68,14 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
                     icon={<HomeIcon className="w-5 h-5"/>}
                     label="Dashboard"
                     onClick={() => {
-                        setActiveTab("overview");
+                        setActiveTab("dashboard");
                     }}
-                    active={activeTab === "overview"} 
+                    active={activeTab === "dashboard"}
                     href={undefined}
                     closeMobileMenu={closeMobileMenu}/>
                 <NavItem
                     icon={<FileTextIcon className="w-5 h-5"/>}
-                    label="My Documents"
+                    label="Documents"
                     onClick={() => {
                         setActiveTab("documents");
                     }}
@@ -84,7 +84,7 @@ export default function Sidebar({mobileMenuOpen, activeTab, setActiveTab, setMob
                     closeMobileMenu={closeMobileMenu}/>
                 <NavItem
                     icon={<FileIcon className="w-5 h-5"/>}
-                    label="New Document"
+                    label="Create"
                     onClick={() => {
                         setActiveTab("create");
                     }}

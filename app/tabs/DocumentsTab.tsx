@@ -4,7 +4,7 @@ import React from "react";
 export default function DocumentsTab() {
     return (
         <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-bold mb-4">My Documents</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">My Documents</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
@@ -26,7 +26,7 @@ export default function DocumentsTab() {
                         <td className="px-6 py-4 whitespace-nowrap">
                             <span
                                 className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Approved
+                                Signed
                             </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800">
@@ -41,7 +41,7 @@ export default function DocumentsTab() {
                         <td className="px-6 py-4 whitespace-nowrap">
                             <span
                                 className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
-                                Pending
+                                Under Review
                             </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800">
@@ -56,7 +56,7 @@ export default function DocumentsTab() {
                         <td className="px-6 py-4 whitespace-nowrap">
                             <span
                                 className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Approved
+                                Signed
                             </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800">

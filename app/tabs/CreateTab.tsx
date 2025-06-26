@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { FileTextIcon } from "lucide-react";
-import SifarisTypeDropdown from './SifarisTypeDropdown';
-import SifarisForm from './SifarisForm';
-import PDFPreview from './PDFPreview';
+import SifarisTypeDropdown from '../components/SifarisTypeDropdown';
+import SifarisForm from '../components/SifarisForm';
+import PDFPreview from '../components/PDFPreview';
 
 export default function CreateTab() {
     // State for generate functionality
