@@ -11,12 +11,10 @@ export default function generateWordDocument(docType: string, formData: any): do
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
 
     // Create document based on document type
-    if (docType === "citizenship") {
+    if (docType === "citizenship-sifaris") {
         return createCitizenshipRecommendation(formData, refNumber, formattedDate);
     }
-
-    // Default document for other types (can be expanded for other document types)
-    return createDefaultDocument(docType, formData);
+    throw new Error("Invalid docType: " + docType);
 }
 
 function createCitizenshipRecommendation(formData: any, refNumber: string, formattedDate: string): docx.Document {
@@ -273,41 +271,5 @@ function createCitizenshipRecommendation(formData: any, refNumber: string, forma
                 }),
             ],
         }],
-    });
-}
-
-function createDefaultDocument(docType: string, formData: any): docx.Document {
-    return new docx.Document({
-        sections: [{
-            properties: {},
-            children: [
-                new docx.Paragraph({
-                    text: `${docType} Document`,
-                    heading: docx.HeadingLevel.HEADING_1,
-                    alignment: docx.AlignmentType.CENTER
-                }),
-                new docx.Paragraph({
-                    text: `Generated on: ${new Date().toLocaleDateString()}`,
-                    alignment: docx.AlignmentType.CENTER
-                }),
-                new docx.Paragraph({
-                    text: ""
-                }),
-                // Add form data to the document
-                ...Object.entries(formData).map(([key, value]) => {
-                    return new docx.Paragraph({
-                        children: [
-                            new docx.TextRun({
-                                text: `${key}: `,
-                                bold: true
-                            }),
-                            new docx.TextRun({
-                                text: `${value}`
-                            })
-                        ]
-                    });
-                })
-            ]
-        }]
     });
 }
