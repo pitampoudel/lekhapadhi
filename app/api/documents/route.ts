@@ -45,7 +45,7 @@ export async function POST(request: Request) {
             fs.mkdirSync(documentsDir, {recursive: true});
         }
 
-        const doc = generateWordDocument(docType, formData);
+        const doc = await generateWordDocument(docType, formData);
 
         const filePath = path.join(documentsDir, filename);
         const buffer = await docx.Packer.toBuffer(doc);
