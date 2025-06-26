@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import camel from "../public/camel.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BellIcon,
   HomeIcon,
@@ -10,15 +10,21 @@ import {
   FileTextIcon,
   LogOutIcon,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function Dashboard() {
+  const { data: session } = useSession();
+  // const user = session?.user;
+  const user = null;
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-lg p-6 hidden md:block">
-        <h2 className="cursor-pointer text-2xl font-bold mb-6">लेखापाडी</h2>
+        <h2 className="cursor-pointer text-2xl font-bold mb-6">
+          <Link href="/">लेखापाडी</Link>
+        </h2>
         <nav className="flex flex-col gap-4">
           <button
             onClick={() => setActiveTab("overview")}
@@ -54,13 +60,13 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="flex-1 p-6">
         <header className="flex justify-between items-center mb-6">
-          <h1 className="text-xl font-semibold">Welcome, User</h1>
+          <h1 className="text-xl font-semibold">Welcome, {user?.name}</h1>
           <div className="flex items-center gap-4">
             <BellIcon className="relative cursor-pointer w-6 h-6 text-gray-500" />
             <div className="cursor-pointer bg-gray-200 rounded-full w-8 h-8">
               <Image
                 className="rounded-full"
-                src={camel}
+                src={user?.image || camel}
                 alt="ProfilePic"
               ></Image>
             </div>
