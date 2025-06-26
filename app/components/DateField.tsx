@@ -23,7 +23,7 @@ const DateField: React.FC<DateFieldProps> = ({
 
   return (
     <div className="relative">
-      <div className={`flex items-center w-full p-4 bg-theme-white border ${
+      <div className={`flex items-center w-full p-4 bg-theme-card border ${
         error ? 'border-theme-error' : 'border-theme-gray-300'
       } rounded-lg shadow-sm hover:shadow-md focus-within:shadow-md focus-within:ring-2 focus-within:ring-theme-primary-600 focus-within:border-theme-primary-600 transition-all ${className}`}>
         <CalendarIcon className="w-5 h-5 text-theme-primary-600 mr-3" />
@@ -47,3 +47,4 @@ const DateField: React.FC<DateFieldProps> = ({
 };
 
 export default DateField;
+

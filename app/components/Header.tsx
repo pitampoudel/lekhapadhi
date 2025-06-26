@@ -17,10 +17,10 @@ export default function Header() {
 
     return <header className="bg-theme-primary-700 shadow-sm flex justify-between items-center">
         <div className="px-4 py-3">
-            <h1 className="text-xl font-semibold text-theme-white">
+            <h1 className="text-xl font-semibold text-theme-light">
                 {greeting}, {user?.name || 'Guest'}
             </h1>
-            <p className="text-sm text-theme-white opacity-80">
+            <p className="text-sm text-theme-light opacity-80">
                 {(() => {
                     const nepaliDate = new NepaliDate(new Date());
                     const weekdays = ['आइतबार', 'सोमबार', 'मंगलबार', 'बुधबार', 'बिहिबार', 'शुक्रबार', 'शनिबार'];
@@ -32,9 +32,9 @@ export default function Header() {
         <div className="flex items-center gap-4 px-4 py-3">
             <div className="relative">
                 <BellIcon
-                    className="cursor-pointer w-6 h-6 text-theme-white hover:text-primary-200 transition-colors"/>
+                    className="cursor-pointer w-6 h-6 text-theme-light hover:text-primary-200 transition-colors"/>
                 <span
-                    className="absolute -top-1 -right-1 bg-red-500 text-theme-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    className="absolute -top-1 -right-1 bg-red-500 text-theme-light text-xs rounded-full w-4 h-4 flex items-center justify-center">
                             2
                         </span>
             </div>
@@ -48,7 +48,7 @@ export default function Header() {
                 />
             ) : (
                 <span
-                    className="hidden md:inline text-sm font-medium text-theme-white">
+                    className="hidden md:inline text-sm font-medium text-theme-light">
                     {user?.name ? user.name.split(' ')[0] : 'Login'}
                 </span>
             )}

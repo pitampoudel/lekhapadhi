@@ -9,7 +9,7 @@ type ProfileTabProps = {
 
 export default function ProfileTab({ user }: ProfileTabProps) {
     return (
-        <div className="bg-theme-white rounded-lg shadow-sm p-6">
+        <div className="bg-theme-card rounded-lg shadow-sm p-6">
             <h2 className="text-lg font-bold mb-6">My Profile</h2>
             <div className="flex flex-col md:flex-row gap-8">
                 <div className="flex flex-col items-center">
@@ -82,3 +82,4 @@ export default function ProfileTab({ user }: ProfileTabProps) {
         </div>
     );
 }
+

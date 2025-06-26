@@ -3,11 +3,11 @@ import React from "react";
 
 export default function DocumentsTab() {
     return (
-        <div className="bg-theme-white rounded-lg shadow-sm p-6">
+        <div className="bg-theme-card rounded-lg shadow-sm p-6">
             <h2 className="text-lg font-semibold text-theme-gray-900 mb-4">My Documents</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-theme-white">
+                    <thead className="bg-theme-card">
                     <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-theme-gray-600 uppercase tracking-wider">Document
                             Type
@@ -17,7 +17,7 @@ export default function DocumentsTab() {
                         <th className="px-6 py-3 text-left text-xs font-medium text-theme-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                     </thead>
-                    <tbody className="bg-theme-white divide-y divide-gray-200">
+                    <tbody className="bg-theme-card divide-y divide-gray-200">
                     <tr>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-gray-900">नागरिकता
                             सिफारिस
@@ -84,3 +84,4 @@ export default function DocumentsTab() {
         </div>
     );
 }
+

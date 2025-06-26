@@ -207,7 +207,7 @@ const SifarisForm: React.FC<SifarisFormProps> = ({
       <div className="mt-10">
         <button
           type="submit"
-          className="w-full py-4 px-6 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-white font-bold rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-theme-primary-600 focus:ring-offset-2 transition-all hover:scale-105 transform"
+          className="w-full py-4 px-6 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-light font-bold rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-theme-primary-600 focus:ring-offset-2 transition-all hover:scale-105 transform"
         >
           सिफारिस तयार गर्नुहोस्
         </button>
@@ -217,3 +217,4 @@ const SifarisForm: React.FC<SifarisFormProps> = ({
 };
 
 export default SifarisForm;
+

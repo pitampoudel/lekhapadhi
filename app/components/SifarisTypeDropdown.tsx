@@ -60,10 +60,11 @@ const SifarisTypeDropdown: React.FC<SifarisTypeDropdownProps> = ({
         value={selectedType}
         onChange={onTypeChange}
         placeholder="-- सिफारिसको प्रकार छान्नुहोस् --"
-        className="bg-theme-white"
+        className="bg-theme-card"
       />
     </div>
   );
 };
 
 export default SifarisTypeDropdown;
+

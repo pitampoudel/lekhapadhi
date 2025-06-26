@@ -82,14 +82,14 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({sifarisType, formData}) => {
                                 href={pdfUrl} 
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="py-2 px-4 bg-theme-gray-600 hover:bg-theme-gray-700 text-theme-white font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-gray focus:ring-offset-2 transition-colors"
+                                className="py-2 px-4 bg-theme-gray-600 hover:bg-theme-gray-700 text-theme-light font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-gray focus:ring-offset-2 transition-colors"
                             >
                                 पूर्ण स्क्रिनमा हेर्नुहोस्
                             </a>
                             <a 
                                 href={pdfUrl} 
                                 download={`sifaris-${sifarisType}.pdf`}
-                                className="py-2 px-4 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-white font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary focus:ring-offset-2 transition-colors"
+                                className="py-2 px-4 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-light font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-theme-primary focus:ring-offset-2 transition-colors"
                             >
                                 डाउनलोड गर्नुहोस्
                             </a>
@@ -107,3 +107,4 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({sifarisType, formData}) => {
 };
 
 export default PDFPreview;
+

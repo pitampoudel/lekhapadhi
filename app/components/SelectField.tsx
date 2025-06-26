@@ -67,7 +67,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         type="button"
         id={id}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full p-4 flex justify-between items-center text-left bg-theme-white border ${
+        className={`w-full p-4 flex justify-between items-center text-left bg-theme-card border ${
           error ? 'border-theme-error' : 'border-theme-gray-300'
         } rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-theme-primary-600 focus:border-theme-primary-600 transition-all ${className}`}
       >
@@ -78,9 +78,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-20 w-full mt-2 bg-theme-white border border-theme-gray-300 rounded-lg shadow-xl max-h-80 overflow-hidden flex flex-col">
+        <div className="absolute z-20 w-full mt-2 bg-theme-card border border-theme-gray-300 rounded-lg shadow-xl max-h-80 overflow-hidden flex flex-col">
           {options.length > 5 && (
-            <div className="sticky top-0 bg-theme-white p-3 border-b border-theme-gray-200">
+            <div className="sticky top-0 bg-theme-card p-3 border-b border-theme-gray-200">
               <div className="relative">
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme-gray-400 w-4 h-4" />
                 <input
@@ -130,3 +130,4 @@ const SelectField: React.FC<SelectFieldProps> = ({
 };
 
 export default SelectField;
+

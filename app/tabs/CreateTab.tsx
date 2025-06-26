@@ -24,7 +24,7 @@ export default function CreateTab() {
     };
 
     return (
-        <div className="bg-theme-white rounded-xl shadow-md p-8 max-w-6xl mx-auto">
+        <div className="bg-theme-card rounded-xl shadow-md p-8 max-w-6xl mx-auto">
             <div className="flex items-center justify-center mb-10">
                 <div className="bg-theme-primary-600 bg-opacity-10 p-4 rounded-full mr-4">
                     <FileTextIcon className="w-7 h-7 text-theme-primary-600"/>
@@ -54,7 +54,7 @@ export default function CreateTab() {
                 ) : (
                     <div className={`grid ${showPreview ? 'grid-cols-1 lg:grid-cols-3 gap-8' : 'grid-cols-1'}`}>
                         {/* Form Section */}
-                        <div className={`bg-theme-white p-6 rounded-xl border border-theme-gray-300 h-fit shadow-sm ${showPreview ? 'lg:col-span-1' : 'w-full max-w-2xl mx-auto'}`}>
+                        <div className={`bg-theme-card p-6 rounded-xl border border-theme-gray-300 h-fit shadow-sm ${showPreview ? 'lg:col-span-1' : 'w-full max-w-2xl mx-auto'}`}>
                             <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
                                 <UserIcon className="w-6 h-6 text-theme-primary-600 mr-3" />
                                 आवेदन विवरण भर्नुहोस्
@@ -78,7 +78,7 @@ export default function CreateTab() {
 
                         {/* PDF Preview Section */}
                         {showPreview && formData && (
-                            <div className="bg-theme-white p-6 rounded-xl border border-theme-gray-300 lg:col-span-2 shadow-sm">
+                            <div className="bg-theme-card p-6 rounded-xl border border-theme-gray-300 lg:col-span-2 shadow-sm">
                                 <h3 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center drop-shadow-sm">
                                     <FileTextIcon className="w-6 h-6 text-theme-primary-600 mr-3" />
                                     कागजात प्रिभ्यू
@@ -95,3 +95,4 @@ export default function CreateTab() {
         </div>
     );
 }
+
