@@ -10,8 +10,8 @@ export interface Document {
 }
 
 export enum DocumentStatus {
+    CREATED = 'Created',
     SIGNED = 'Signed',
     UNDER_REVIEW = 'Under Review',
-    PENDING = 'Pending',
     REJECTED = 'Rejected'
 }

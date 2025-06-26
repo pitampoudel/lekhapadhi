@@ -56,7 +56,7 @@ export async function POST(request: Request) {
         const document: Document = {
             title: `${docType} Document`,
             type: docType,
-            status: DocumentStatus.PENDING,
+            status: DocumentStatus.CREATED,
             userEmail,
             createdAt: new Date().toISOString(),
             publicUrl,
