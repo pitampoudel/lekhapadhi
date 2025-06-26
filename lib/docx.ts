@@ -1,7 +1,5 @@
 import * as docx from "docx";
-import * as fs from "fs";
-import * as path from "path";
-import { enhanceDocumentContent } from "./gemini";
+import {enhanceDocumentContent} from "./gemini";
 
 export default async function generateWordDocument(docType: string, formData: any): Promise<docx.Document> {
     // Generate a unique reference number
@@ -29,28 +27,34 @@ export default async function generateWordDocument(docType: string, formData: an
 }
 
 // Function to create a standard document with common elements
-function createStandardDocument(
+async function createStandardDocument(
     children: docx.Paragraph[],
     formData: any,
     refNumber: string,
     formattedDate: string
-): docx.Document {
-    // Add logo image
-    const logoPath = path.join(process.cwd(), 'public', 'ward-logo.svg');
+): Promise<docx.Document> {
+    // Add logo image from remote URL
+    const logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Emblem_of_Nepal.svg/1200px-Emblem_of_Nepal.svg.png";
 
-    // Create image object if the logo file exists
+    // Create image object
     let logoImage;
     try {
-        if (fs.existsSync(logoPath)) {
-            const logoData = fs.readFileSync(logoPath);
-            logoImage = new docx.ImageRun({
-                data: logoData,
-                transformation: {
-                    width: 100,
-                    height: 100,
-                }
-            });
+        // In Next.js, fetch is available in both client and server components
+        const response = await fetch(logoUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch logo: ${response.status} ${response.statusText}`);
         }
+
+        // Convert the response to an ArrayBuffer
+        const logoData = await response.arrayBuffer();
+
+        logoImage = new docx.ImageRun({
+            data: Buffer.from(logoData),
+            transformation: {
+                width: 100,
+                height: 100,
+            }
+        });
     } catch (error) {
         console.error("Error loading logo image:", error);
         // Continue without the logo if there's an error
@@ -289,28 +293,11 @@ async function createCitizenshipRecommendation(formData: any, refNumber: string,
                 before: 200,
                 after: 200,
             },
-        }),
-
-        // Additional details if provided
-        ...(formData.additionalDetails ? [
-            new docx.Paragraph({
-                alignment: docx.AlignmentType.LEFT,
-                children: [
-                    new docx.TextRun({
-                        text: `अतिरिक्त जानकारी: ${formData.additionalDetails}`,
-                        size: 24,
-                    }),
-                ],
-                spacing: {
-                    before: 200,
-                    after: 400,
-                },
-            }),
-        ] : []),
+        })
     ];
 
     // Use the standard document structure
-    return createStandardDocument(documentContent, formData, refNumber, formattedDate);
+    return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
 async function createBirthRegistrationRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
@@ -383,28 +370,11 @@ async function createBirthRegistrationRecommendation(formData: any, refNumber: s
                 before: 200,
                 after: 200,
             },
-        }),
-
-        // Additional details if provided
-        ...(formData.additionalDetails ? [
-            new docx.Paragraph({
-                alignment: docx.AlignmentType.LEFT,
-                children: [
-                    new docx.TextRun({
-                        text: `अतिरिक्त जानकारी: ${formData.additionalDetails}`,
-                        size: 24,
-                    }),
-                ],
-                spacing: {
-                    before: 200,
-                    after: 400,
-                },
-            }),
-        ] : []),
+        })
     ];
 
     // Use the standard document structure
-    return createStandardDocument(documentContent, formData, refNumber, formattedDate);
+    return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
 async function createResidenceRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
@@ -477,28 +447,11 @@ async function createResidenceRecommendation(formData: any, refNumber: string, f
                 before: 200,
                 after: 200,
             },
-        }),
-
-        // Additional details if provided
-        ...(formData.additionalDetails ? [
-            new docx.Paragraph({
-                alignment: docx.AlignmentType.LEFT,
-                children: [
-                    new docx.TextRun({
-                        text: `अतिरिक्त जानकारी: ${formData.additionalDetails}`,
-                        size: 24,
-                    }),
-                ],
-                spacing: {
-                    before: 200,
-                    after: 400,
-                },
-            }),
-        ] : []),
+        })
     ];
 
     // Use the standard document structure
-    return createStandardDocument(documentContent, formData, refNumber, formattedDate);
+    return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
 async function createMarriageRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
@@ -579,28 +532,11 @@ async function createMarriageRecommendation(formData: any, refNumber: string, fo
                 before: 200,
                 after: 200,
             },
-        }),
-
-        // Additional details if provided
-        ...(formData.additionalDetails ? [
-            new docx.Paragraph({
-                alignment: docx.AlignmentType.LEFT,
-                children: [
-                    new docx.TextRun({
-                        text: `अतिरिक्त जानकारी: ${formData.additionalDetails}`,
-                        size: 24,
-                    }),
-                ],
-                spacing: {
-                    before: 200,
-                    after: 400,
-                },
-            }),
-        ] : []),
+        })
     ];
 
     // Use the standard document structure
-    return createStandardDocument(documentContent, formData, refNumber, formattedDate);
+    return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
 async function createRelationshipRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
@@ -691,5 +627,5 @@ async function createRelationshipRecommendation(formData: any, refNumber: string
     ];
 
     // Use the standard document structure
-    return createStandardDocument(documentContent, formData, refNumber, formattedDate);
+    return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
