@@ -1,4 +1,3 @@
-// Define form field types
 export interface FormField {
   id: string;
   label: string;
@@ -8,7 +7,6 @@ export interface FormField {
   required?: boolean;
 }
 
-// Common fields for all Sifaris types
 export const commonFields: FormField[] = [
   {
     id: 'fullName',
@@ -54,7 +52,6 @@ export const commonFields: FormField[] = [
   }
 ];
 
-// Specific fields for each type
 export const citizenshipFields: FormField[] = [
   ...commonFields,
   {

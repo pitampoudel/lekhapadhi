@@ -1,22 +1,23 @@
 "use client";
 import React, {useCallback, useState} from "react";
-import {UserIcon, XIcon} from "lucide-react";
+import {XIcon} from "lucide-react";
 import DocumentTypeSelector from './DocumentTypeSelector';
-import DynamicForm, {CreateDocFormData} from './DynamicForm';
 import Stepper, {Step} from '../components/input/Stepper';
-import {getFieldsByType} from "./formFields";
-import PreviewDoc from "@/app/create/PreviewDoc";
+import {getFieldsByType} from "../config/formFields";
 import {useRouter} from "next/navigation";
-import {docTypes} from "@/app/config/data";
+import {docTypes} from "@/app/config/docTypes";
+import FormStep from "./FormStep";
+import PreviewStep from "./PreviewStep";
 
 
 export default function CreateDocPage() {
     const router = useRouter();
     const [docTypeId, setDocTypeId] = useState<string>('');
-    const [formData, setFormData] = useState<CreateDocFormData | null>(null);
+    const [formData, setFormData] = useState<any | null>(null);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [formValues, setFormValues] = useState<Record<string, string>>({});
 
     const handleClose = () => {
         router.push('/');
@@ -48,14 +49,23 @@ export default function CreateDocPage() {
     const handleTypeChange = useCallback((type: string) => {
         setDocTypeId(type);
         setFormData(null);
+        setFormValues({});
         setFormErrors([]);
         if (type) {
             setCurrentStep(1); // Move to form step when type is selected
         }
     }, []);
 
+    // Handler for form field changes
+    const handleFieldChange = useCallback((id: string, value: string) => {
+        setFormValues(prev => ({
+            ...prev,
+            [id]: value
+        }));
+    }, []);
+
     // Handler for form submission
-    const handleFormSubmit = useCallback((data: CreateDocFormData) => {
+    const handleFormSubmit = useCallback((data: any) => {
         setIsSubmitting(true);
         setFormErrors([]);
 
@@ -140,28 +150,57 @@ export default function CreateDocPage() {
 
                     {/* Step 2: Form Filling */}
                     {currentStep === 1 && (
-                        <div className="w-full max-w-2xl">
-                            <h2 className="text-xl font-semibold text-theme-gray-900 mb-6 flex items-center">
-                                <UserIcon className="w-6 h-6 text-theme-primary-600 mr-3"/>
-                                {selectedDocType ? `${selectedDocType.name} - आवेदन विवरण` : 'आवेदन विवरण भर्नुहोस्'}
-                            </h2>
-                            <DynamicForm
-                                type={docTypeId}
-                                onFormSubmit={handleFormSubmit}
-                                isSubmitting={isSubmitting}
-                                initialData={formData}
-                            />
-                        </div>
+                        <FormStep
+                            docTypeId={docTypeId}
+                            selectedDocType={selectedDocType}
+                            formValues={formValues}
+                            handleFieldChange={handleFieldChange}
+                            handleFormSubmit={handleFormSubmit}
+                            getFieldsByType={getFieldsByType}
+                            formErrors={formErrors}
+                            isSubmitting={isSubmitting}
+                        />
                     )}
 
                     {/* Step 3: Preview */}
                     {currentStep === 2 && formData && (
-                        <div className="w-full">
-                            <PreviewDoc
-                                selectedDocType={selectedDocType}
-                                formData={formData}
-                            />
-                        </div>
+                        <PreviewStep
+                            docTypeId={docTypeId}
+                            selectedDocType={selectedDocType}
+                            formData={formData}
+                            getFieldsByType={getFieldsByType}
+                            onBack={() => setCurrentStep(1)}
+                            onSubmit={async () => {
+                                setIsSubmitting(true);
+                                try {
+                                    const response = await fetch('/api/documents', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({
+                                            docType: docTypeId,
+                                            formData
+                                        }),
+                                    });
+
+                                    if (!response.ok) {
+                                        throw new Error('Failed to create document');
+                                    }
+
+                                    const result = await response.json();
+                                    router.push(result.publicUrl);
+                                    router.push("/");
+                                } catch (error) {
+                                    console.error('Error creating document:', error);
+                                    setFormErrors(['कागजात सिर्जना गर्दा त्रुटि भयो। कृपया पुन: प्रयास गर्नुहोस्।']);
+                                    setCurrentStep(1);
+                                } finally {
+                                    setIsSubmitting(false);
+                                }
+                            }}
+                            isSubmitting={isSubmitting}
+                        />
                     )}
                 </div>
             </div>

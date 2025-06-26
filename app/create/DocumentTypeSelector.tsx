@@ -1,6 +1,6 @@
 import React from "react";
 import {CheckCircleIcon, FileTextIcon} from "lucide-react";
-import {docTypes} from "@/app/config/data";
+import {docTypes} from "@/app/config/docTypes";
 
 interface DocumentTypeSelectorProps {
     selectedType: string;
