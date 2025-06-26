@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
 import React, {useEffect, useState} from "react";
 import SifarisTypeDropdown from './components/SifarisTypeDropdown';
@@ -406,16 +405,6 @@ export default function Dashboard() {
                     )}
                 </div>
             )}
-
-            {/* Footer */}
-            <footer className="mt-8 text-center text-sm text-gray-600 py-4">
-                <p>© 2023 लेखापाडी. All rights reserved.</p>
-                <div className="flex justify-center gap-4 mt-2">
-                    <Link href="#" className="hover:text-blue-600">Terms of Service</Link>
-                    <Link href="#" className="hover:text-blue-600">Privacy Policy</Link>
-                    <Link href="#" className="hover:text-blue-600">Contact Us</Link>
-                </div>
-            </footer>
         </DashboardLayout>
     );
 }
