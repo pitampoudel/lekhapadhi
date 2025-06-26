@@ -170,25 +170,33 @@ const SifarisForm: React.FC<SifarisFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
         {fields.map((field) => (
           <div 
             key={field.id} 
-            className={`mb-2 ${
+            className={`mb-4 ${
               field.type === 'textarea' ? 'md:col-span-2' : ''
             }`}
           >
             <label 
               htmlFor={field.id} 
-              className="block text-lg font-medium mb-2 text-theme-gray-800"
+              className="block text-lg font-medium mb-3 text-theme-gray-800 flex items-center"
             >
+              {getFieldIcon(field) && (
+                <span className="mr-2 text-theme-primary-600">{getFieldIcon(field)}</span>
+              )}
               {field.label}{" "}
-              {field.required && <span className="text-theme-error">*</span>}
+              {field.required && <span className="text-theme-error ml-1">*</span>}
             </label>
-            {renderField(field)}
+            <div className="transition-all duration-200 hover:shadow-md focus-within:shadow-md rounded-lg">
+              {renderField(field)}
+            </div>
             {errors[field.id] && (
-              <p className="mt-1 text-theme-error text-sm">
+              <p className="mt-2 text-theme-error text-sm flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
                 {(errors[field.id]?.message as string) || "यो फिल्ड आवश्यक छ"}
               </p>
             )}
@@ -196,10 +204,10 @@ const SifarisForm: React.FC<SifarisFormProps> = ({
         ))}
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <button
           type="submit"
-          className="w-full py-3 px-4 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-white font-bold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-theme-primary focus:ring-offset-2 transition-colors"
+          className="w-full py-4 px-6 bg-theme-primary-600 hover:bg-theme-primary-700 text-theme-white font-bold rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-theme-primary-600 focus:ring-offset-2 transition-all hover:scale-105 transform"
         >
           सिफारिस तयार गर्नुहोस्
         </button>
