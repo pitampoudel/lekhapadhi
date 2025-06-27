@@ -104,7 +104,7 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
                 ) : (
                     <div className="flex flex-col space-y-3">
                         {documents.map((document) => (
-                            <DocumentRow key={document._id} document={document} onDocumentDeleted={fetchDocuments}/>
+                            <DocumentRow key={document._id} document={document} onDocumentDeleted={fetchDocuments} showActions={false}/>
                         ))}
                     </div>
                 )}

@@ -5,9 +5,10 @@ import {SignatureRequestModal} from "@/app/tabs/dialogs";
 interface DocumentRowProps {
     document: Document;
     onDocumentDeleted?: () => void;
+    showActions?: boolean;
 }
 
-export default function DocumentRow({document, onDocumentDeleted}: DocumentRowProps) {
+export default function DocumentRow({document, onDocumentDeleted, showActions = true}: DocumentRowProps) {
     const [showSignatureModal, setShowSignatureModal] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
@@ -132,6 +133,7 @@ export default function DocumentRow({document, onDocumentDeleted}: DocumentRowPr
                 </div>
 
                 {/* Actions */}
+                {showActions && (
                 <div className="flex flex-wrap gap-2">
                     <a
                         href={document.publicUrl}
@@ -224,6 +226,7 @@ export default function DocumentRow({document, onDocumentDeleted}: DocumentRowPr
                         {isDeleting ? 'DELETING...' : 'DELETE'}
                     </button>
                 </div>
+                )}
             </div>
 
             {showSignatureModal && (

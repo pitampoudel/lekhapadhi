@@ -58,6 +58,7 @@ export default function DocumentsTab() {
                             key={document._id} 
                             document={document}
                             onDocumentDeleted={fetchDocuments}
+                            showActions={true}
                         />
                     ))}
                 </div>
