@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
         const filename = `${docType.toLowerCase()}_${uuidv4()}.docx`;
 
-        const publicDir = path.join(process.cwd(), 'public');
+        const publicDir = process.env.NEXT_PUBLIC_BASE_URL as string;
         const documentsDir = path.join(publicDir, 'documents');
 
         if (!fs.existsSync(documentsDir)) {
