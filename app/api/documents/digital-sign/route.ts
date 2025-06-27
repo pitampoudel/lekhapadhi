@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         }
 
         // Parse the JSON request body
-        const { documentId, signatureDataUrl, documentUrl, x = 100, y = 100, width = 200, height = 100 } = await request.json();
+        const { documentId, signatureDataUrl, documentUrl, width = 200, height = 100 } = await request.json();
 
         if (!documentId || !signatureDataUrl || !documentUrl) {
             return NextResponse.json(
@@ -35,8 +35,6 @@ export async function POST(request: Request) {
         const signedPdfBytes = await convertDocxToPdfWithSignature(
             docxBytes,
             signatureDataUrl,
-            x,
-            y,
             width,
             height
         );
