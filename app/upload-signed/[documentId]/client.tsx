@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import SignatureCanvas from '@/app/components/SignatureCanvas';
 
 export default function UploadSignedDocumentPage({ params }: { params: { documentId: string } }) {
   const [file, setFile] = useState<File | null>(null);
@@ -9,6 +10,9 @@ export default function UploadSignedDocumentPage({ params }: { params: { documen
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [documentTitle, setDocumentTitle] = useState<string | null>(null);
+  const [documentUrl, setDocumentUrl] = useState<string | null>(null);
+  const [signMethod, setSignMethod] = useState<'upload' | 'digital'>('upload');
+  const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null);
   const router = useRouter();
 
   // Get the document ID from the URL
@@ -22,6 +26,7 @@ export default function UploadSignedDocumentPage({ params }: { params: { documen
         if (response.ok) {
           const document = await response.json();
           setDocumentTitle(document.title);
+          setDocumentUrl(document.publicUrl); // Store the document URL for digital signing
         } else {
           setError('Document not found or you do not have permission to access it.');
         }
@@ -55,39 +60,69 @@ export default function UploadSignedDocumentPage({ params }: { params: { documen
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!file) {
-      setError('Please select a PDF file to upload');
-      return;
-    }
 
     try {
       setIsSubmitting(true);
       setError(null);
 
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('documentId', documentId);
+      let response;
 
-      const response = await fetch('/api/documents/upload-signed', {
-        method: 'POST',
-        body: formData,
-      });
+      if (signMethod === 'upload') {
+        if (!file) {
+          setError('Please select a PDF file to upload');
+          return;
+        }
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('documentId', documentId);
+
+        response = await fetch('/api/documents/upload-signed', {
+          method: 'POST',
+          body: formData,
+        });
+      } else {
+        // Digital signing
+        if (!signatureDataUrl) {
+          setError('Please draw your signature');
+          setIsSubmitting(false);
+          return;
+        }
+
+        if (!documentUrl) {
+          setError('Document URL not found');
+          setIsSubmitting(false);
+          return;
+        }
+
+        response = await fetch('/api/documents/digital-sign', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            documentId,
+            signatureDataUrl,
+            documentUrl
+          }),
+        });
+      }
 
       if (!response.ok) {
-        throw new Error('Failed to upload signed document');
+        throw new Error(`Failed to ${signMethod === 'upload' ? 'upload' : 'digitally sign'} document`);
       }
 
       setSuccess(true);
       // Clear the form
       setFile(null);
-      
+      setSignatureDataUrl(null);
+
       // Redirect to home page after 3 seconds
       setTimeout(() => {
         router.push('/');
       }, 3000);
     } catch (err) {
-      console.error('Error uploading signed document:', err);
-      setError('Failed to upload signed document. Please try again.');
+      console.error(`Error ${signMethod === 'upload' ? 'uploading' : 'digitally signing'} document:`, err);
+      setError(`Failed to ${signMethod === 'upload' ? 'upload' : 'digitally sign'} document. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -121,18 +156,61 @@ export default function UploadSignedDocumentPage({ params }: { params: { documen
             {documentTitle && (
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-theme-gray-600 dark:text-theme-gray-400 mb-1">
-                    Signed PDF Document
-                  </label>
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="w-full px-3 py-2 border border-theme-gray-200 dark:border-theme-dark-700 rounded-md bg-theme-light dark:bg-theme-dark-800 text-theme-gray-900 dark:text-theme-gray-100"
-                    accept="application/pdf"
-                  />
-                  <p className="text-xs text-theme-gray-500 dark:text-theme-gray-400 mt-1">
-                    Please upload the signed document in PDF format
-                  </p>
+                  <div className="flex space-x-4 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => setSignMethod('upload')}
+                      className={`px-4 py-2 rounded-md ${
+                        signMethod === 'upload'
+                          ? 'bg-theme-primary-600 dark:bg-theme-primary-700 text-theme-light'
+                          : 'bg-theme-gray-200 dark:bg-theme-dark-700 text-theme-gray-700 dark:text-theme-gray-300'
+                      }`}
+                    >
+                      Upload Signed Document
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSignMethod('digital')}
+                      className={`px-4 py-2 rounded-md ${
+                        signMethod === 'digital'
+                          ? 'bg-theme-primary-600 dark:bg-theme-primary-700 text-theme-light'
+                          : 'bg-theme-gray-200 dark:bg-theme-dark-700 text-theme-gray-700 dark:text-theme-gray-300'
+                      }`}
+                    >
+                      Sign Digitally
+                    </button>
+                  </div>
+
+                  {signMethod === 'upload' ? (
+                    <>
+                      <label className="block text-sm font-medium text-theme-gray-600 dark:text-theme-gray-400 mb-1">
+                        Signed PDF Document
+                      </label>
+                      <input
+                        type="file"
+                        onChange={handleFileChange}
+                        className="w-full px-3 py-2 border border-theme-gray-200 dark:border-theme-dark-700 rounded-md bg-theme-light dark:bg-theme-dark-800 text-theme-gray-900 dark:text-theme-gray-100"
+                        accept="application/pdf"
+                      />
+                      <p className="text-xs text-theme-gray-500 dark:text-theme-gray-400 mt-1">
+                        Please upload the signed document in PDF format
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <label className="block text-sm font-medium text-theme-gray-600 dark:text-theme-gray-400 mb-1">
+                        Draw Your Signature
+                      </label>
+                      <SignatureCanvas
+                        onSignatureChange={setSignatureDataUrl}
+                        width={450}
+                        height={200}
+                      />
+                      <p className="text-xs text-theme-gray-500 dark:text-theme-gray-400 mt-1">
+                        Draw your signature above. The signature will be added to the document and converted to PDF format.
+                      </p>
+                    </>
+                  )}
                 </div>
 
                 {error && (
@@ -145,9 +223,11 @@ export default function UploadSignedDocumentPage({ params }: { params: { documen
                   <button
                     type="submit"
                     className="px-4 py-2 bg-theme-success-600 dark:bg-theme-success-700 text-theme-light rounded-md hover:bg-theme-success-700 dark:hover:bg-theme-success-800"
-                    disabled={isSubmitting || !file}
+                    disabled={isSubmitting || (signMethod === 'upload' ? !file : !signatureDataUrl)}
                   >
-                    {isSubmitting ? 'Uploading...' : 'Upload Document'}
+                    {isSubmitting
+                      ? (signMethod === 'upload' ? 'Uploading...' : 'Signing...')
+                      : (signMethod === 'upload' ? 'Upload Document' : 'Sign Document')}
                   </button>
                 </div>
               </form>

@@ -9,6 +9,16 @@ import {
     ResidenceFormData
 } from "./types/formData";
 
+/**
+ * Fetches a DOCX document from a URL
+ * @param url The URL of the DOCX document
+ * @returns The DOCX document as a byte array
+ */
+export async function fetchDocxFromUrl(url: string): Promise<ArrayBuffer> {
+    const response = await fetch(url);
+    return await response.arrayBuffer();
+}
+
 export default async function generateWordDocument(docType: string, formData: FormData): Promise<docx.Document> {
     // Generate a unique reference number
     const refNumber = `${Math.floor(Math.random() * 1000)}-${new Date().getFullYear()}/${new Date().getMonth() + 1}`;
