@@ -6,12 +6,19 @@ export interface Document {
     userEmail: string;
     createdAt: string;
     publicUrl: string;
-    srcUrl: string;
+    signatureRequest?: SignatureRequest;
+    signedDocumentUrl?: string;
+}
+
+export interface SignatureRequest {
+    requestedAt: string;
+    requestedToEmail: string;
+    message?: string;
 }
 
 export enum DocumentStatus {
     CREATED = 'Created',
     SIGNED = 'Signed',
-    UNDER_REVIEW = 'Under Review',
-    REJECTED = 'Rejected'
+    REJECTED = 'Rejected',
+    PENDING_SIGNATURE = 'Pending Signature'
 }

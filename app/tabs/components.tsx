@@ -1,4 +1,6 @@
+import React from "react";
 import {Document, DocumentStatus} from "@/lib/types/document";
+import {SignatureRequestModal} from "@/app/tabs/dialogs";
 
 // Function to render the status badge with appropriate color
 export const renderStatusBadge = (status: string) => {
@@ -9,11 +11,7 @@ export const renderStatusBadge = (status: string) => {
             bgColor = 'bg-green-100';
             textColor = 'text-green-800';
             break;
-        case DocumentStatus.UNDER_REVIEW:
-            bgColor = 'bg-amber-100';
-            textColor = 'text-amber-800';
-            break;
-        case DocumentStatus.PENDING:
+        case DocumentStatus.PENDING_SIGNATURE:
             bgColor = 'bg-blue-100';
             textColor = 'text-blue-800';
             break;
@@ -34,6 +32,11 @@ export const renderStatusBadge = (status: string) => {
 };
 
 export function DocumentRow({document}: { document: Document }) {
+    const [showSignatureModal, setShowSignatureModal] = React.useState(false);
+    const handleRequestSignature = () => {
+        setShowSignatureModal(true);
+    };
+
     return <tr key={document._id}>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-theme-gray-900">
             <div className="flex flex-col">
@@ -47,12 +50,42 @@ export function DocumentRow({document}: { document: Document }) {
         <td className="px-6 py-4 whitespace-nowrap">
             {renderStatusBadge(document.status)}
         </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm">
+        <td className="px-6 py-4 whitespace-nowrap text-sm flex space-x-2">
             <a
                 href={document.publicUrl}
                 className="bg-theme-primary-600 hover:bg-theme-primary-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">
-                VIEW DETAILS
+                VIEW ORIGINAL
             </a>
+
+            {document.status === DocumentStatus.CREATED && (
+                <button
+                    onClick={handleRequestSignature}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">
+                    REQUEST SIGNATURE
+                </button>
+            )}
+
+            {/* Show a message for the requesting user when document is pending signature */}
+            {document.status === DocumentStatus.PENDING_SIGNATURE && (
+                <span className="text-blue-600 text-sm italic">
+                    Waiting for signature from {document.signatureRequest?.requestedToEmail}
+                </span>
+            )}
+
+            {document.status === DocumentStatus.SIGNED && document.signedDocumentUrl && (
+                <a
+                    href={document.signedDocumentUrl}
+                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">
+                    VIEW SIGNED
+                </a>
+            )}
+
+            {showSignatureModal && (
+                <SignatureRequestModal
+                    document={document}
+                    onClose={() => setShowSignatureModal(false)}
+                />
+            )}
         </td>
     </tr>
 }
@@ -67,5 +100,4 @@ export function DocumentsHeader() {
         <th className="px-6 py-3 text-left text-xs font-medium text-theme-gray-600 uppercase tracking-wider">Actions</th>
     </tr>
     </thead>
-
 }

@@ -1,6 +1,6 @@
-import {Collection, Db} from 'mongodb';
+import {Collection, Db, ObjectId} from 'mongodb';
 import clientPromise from '@/lib/mongodb';
-import {Document} from '@/lib/types/document';
+import {Document, DocumentStatus} from '@/lib/types/document';
 
 async function getCollection(): Promise<Collection<Document>> {
     const client = await clientPromise;
@@ -20,4 +20,58 @@ export async function createDocument(document: Document): Promise<Document> {
     const collection = await getCollection();
     const result = await collection.insertOne(document);
     return {...document, _id: result.insertedId.toString()};
+}
+
+export async function getDocumentById(id: string): Promise<Document | null> {
+    const collection = await getCollection();
+    return await collection.findOne({_id: new ObjectId(id)});
+}
+
+export async function updateDocument(id: string, update: Partial<Document>): Promise<boolean> {
+    const collection = await getCollection();
+    const result = await collection.updateOne(
+        {_id: new ObjectId(id)},
+        {$set: update}
+    );
+    return result.modifiedCount > 0;
+}
+
+export async function requestSignature(
+    documentId: string,
+    signerEmail: string,
+    message?: string
+): Promise<boolean> {
+    const document = await getDocumentById(documentId);
+
+    if (!document) {
+        throw new Error('Document not found');
+    }
+
+    const signatureRequest = {
+        requestedAt: new Date().toISOString(),
+        requestedToEmail: signerEmail,
+        message
+    };
+
+    return await updateDocument(documentId, {
+        status: DocumentStatus.PENDING_SIGNATURE,
+        signatureRequest
+    });
+}
+
+export async function uploadSignedDocument(documentId: string, signedDocumentUrl: string): Promise<boolean> {
+    const document = await getDocumentById(documentId);
+
+    if (!document) {
+        throw new Error('Document not found');
+    }
+
+    if (!document.signatureRequest) {
+        throw new Error('No signature request found for this document');
+    }
+
+    return await updateDocument(documentId, {
+        status: DocumentStatus.SIGNED,
+        signedDocumentUrl
+    });
 }
