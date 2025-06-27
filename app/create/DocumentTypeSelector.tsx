@@ -34,6 +34,9 @@ const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({selectedType
                         <h4 className="text-lg font-medium text-theme-gray-900 mb-1">
                             {type.name}
                         </h4>
+                        <p className="text-sm text-theme-gray-600 mt-1">
+                            {type.description}
+                        </p>
                     </div>
                 </div>
             ))}

@@ -34,28 +34,46 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
         fetchDocuments().then(r => console.log(r));
     }, []);
 
+    // Calculate document statistics
+    const createdCount = documents.filter(doc => doc.status === 'Created').length;
+    const signedCount = documents.filter(doc => doc.status === 'Signed').length;
+    const pendingCount = documents.filter(doc => doc.status === 'Pending Signature').length;
+
+    // Calculate trends
+    const currentDate = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(currentDate.getMonth() - 1);
+
+    const thisMonthCreated = documents.filter(doc => 
+        doc.status === 'Created' && new Date(doc.createdAt) > oneMonthAgo
+    ).length;
+
+    const signedPercentage = documents.length > 0 
+        ? Math.round((signedCount / documents.length) * 100) 
+        : 0;
+
     return (
         <>
             <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <Card
                     title="Created"
-                    value="4"
+                    value={createdCount.toString()}
                     icon={<FileTextIcon className="w-5 h-5 text-blue-500"/>}
-                    trend="+2 this month"
+                    trend={`+${thisMonthCreated} this month`}
                     color="blue"
                 />
                 <Card
                     title="Signed"
-                    value="2"
+                    value={signedCount.toString()}
                     icon={<CheckCircleIcon className="w-5 h-5 text-green-500"/>}
-                    trend="100% success rate"
+                    trend={`${signedPercentage}% success rate`}
                     color="green"
                 />
                 <Card
                     title="Under Review"
-                    value="1"
+                    value={pendingCount.toString()}
                     icon={<ClockIcon className="w-5 h-5 text-amber-500"/>}
-                    trend="Avg. 2 days wait time"
+                    trend="Awaiting signatures"
                     color="amber"
                 />
             </section>
