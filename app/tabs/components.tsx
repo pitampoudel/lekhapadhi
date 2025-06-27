@@ -3,7 +3,7 @@ import {Document, DocumentStatus} from "@/lib/types/document";
 import {SignatureRequestModal} from "@/app/tabs/dialogs";
 
 // Function to render the status badge with appropriate color
-export const renderStatusBadge = (status: string) => {
+export const renderStatusBadge = (status: string, signatureRequestedToEmail: string | undefined) => {
     let bgColor: string;
     let textColor: string;
     switch (status) {
@@ -25,9 +25,21 @@ export const renderStatusBadge = (status: string) => {
     }
 
     return (
-        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${bgColor} ${textColor}`}>
-                {status}
-            </span>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <div className="flex flex-col gap-1">
+    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${bgColor} ${textColor}`}>
+      {status}
+    </span>
+                {
+                    status == DocumentStatus.PENDING_SIGNATURE && signatureRequestedToEmail &&
+                    <span className="text-blue-600 text-sm italic">
+
+      Waiting for signature from {signatureRequestedToEmail}
+    </span>
+                }
+            </div>
+        </td>
+
     );
 };
 
@@ -48,13 +60,13 @@ export function DocumentRow({document}: { document: Document }) {
             {new Date(document.createdAt).toLocaleDateString()}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-            {renderStatusBadge(document.status)}
+            {renderStatusBadge(document.status, document.signatureRequest?.requestedToEmail)}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm flex space-x-2">
             <a
                 href={document.publicUrl}
                 className="bg-theme-primary-600 hover:bg-theme-primary-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">
-                VIEW ORIGINAL
+                DOWNLOAD ORIGINAL
             </a>
 
             {document.status === DocumentStatus.CREATED && (
@@ -66,10 +78,14 @@ export function DocumentRow({document}: { document: Document }) {
             )}
 
             {/* Show a message for the requesting user when document is pending signature */}
-            {document.status === DocumentStatus.PENDING_SIGNATURE && (
-                <span className="text-blue-600 text-sm italic">
-                    Waiting for signature from {document.signatureRequest?.requestedToEmail}
-                </span>
+            {document.status === DocumentStatus.PENDING_SIGNATURE && (<>
+                    <button
+                        onClick={handleRequestSignature}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md transition-colors cursor-pointer">
+                        REQUEST AGAIN
+                    </button>
+                </>
+
             )}
 
             {document.status === DocumentStatus.SIGNED && document.signedDocumentUrl && (

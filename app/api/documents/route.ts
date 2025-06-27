@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
         const filename = `${docType.toLowerCase()}_${uuidv4()}.docx`;
 
-        const publicDir = process.env.NEXT_PUBLIC_BASE_URL as string;
+        const publicDir = path.join(process.cwd(), 'public');
         const documentsDir = path.join(publicDir, 'documents');
 
         if (!fs.existsSync(documentsDir)) {
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         const buffer = await docx.Packer.toBuffer(doc);
         fs.writeFileSync(filePath, buffer);
 
-        const publicUrl = `/documents/${filename}`;
+        const publicUrl = process.env.NEXT_PUBLIC_BASE_URL + `/documents/${filename}`;
 
         const document: Document = {
             title: formData.documentName || `${docType} Document`, // Use user-provided name or fallback to auto-generated
