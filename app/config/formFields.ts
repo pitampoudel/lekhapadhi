@@ -110,6 +110,17 @@ export const birthRegistrationFields: FormField[] = [
 export const residenceFields: FormField[] = [
   ...commonFields,
   {
+    id: 'gender',
+    label: 'लिङ्ग',
+    type: 'select',
+    options: [
+      { value: 'male', label: 'पुरुष' },
+      { value: 'female', label: 'महिला' },
+      { value: 'other', label: 'अन्य' }
+    ],
+    required: true
+  },
+  {
     id: 'residingSince',
     label: 'बसोबास गरेको मिति देखि',
     type: 'date',

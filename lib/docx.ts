@@ -1,12 +1,12 @@
 import * as docx from "docx";
 import {enhanceDocumentContent} from "./gemini";
-import { 
-    FormData, 
-    CitizenshipFormData, 
-    BirthRegistrationFormData, 
-    ResidenceFormData, 
-    MarriageFormData, 
-    RelationshipFormData 
+import {
+    BirthRegistrationFormData,
+    CitizenshipFormData,
+    FormData,
+    MarriageFormData,
+    RelationshipFormData,
+    ResidenceFormData
 } from "./types/formData";
 
 export default async function generateWordDocument(docType: string, formData: FormData): Promise<docx.Document> {
@@ -236,7 +236,7 @@ async function createCitizenshipRecommendation(formData: CitizenshipFormData, re
     const originalContent = `प्रस्तुत विषयमा यस वडा नं. ${formData.wardNo} स्थायी ठेगाना भएका श्री ${formData.fatherName} तथा श्रीमती ${formData.motherName} को ${formData.citizenshipType === 'birthCitizenship' ? 'जन्मको आधारमा' : 'वंशजको आधारमा'} छोरा/छोरी मिति ${formData.dateOfBirth} मा जन्म भएको श्री ${formData.fullName} लाई नेपाली नागरिकताको प्रमाण-पत्र प्रदान गरिदिनुहुन सिफारिस साथ अनुरोध गर्दछु।`;
 
     // Use Gemini to enhance the content
-    const enhancedContent = await enhanceDocumentContent("citizenship-sifaris", originalContent, formData);
+    const enhancedContent = await enhanceDocumentContent("citizenship-sifaris", originalContent + `Additional requirement: ${formData.additionalDetails}`, formData);
 
     // Create document content specific to citizenship recommendation
     const documentContent = [
@@ -551,15 +551,33 @@ async function createRelationshipRecommendation(formData: RelationshipFormData, 
     // Get relationship type in Nepali
     let relationshipNepali = "";
     switch (formData.relationship) {
-        case 'father': relationshipNepali = "बुवा"; break;
-        case 'mother': relationshipNepali = "आमा"; break;
-        case 'son': relationshipNepali = "छोरा"; break;
-        case 'daughter': relationshipNepali = "छोरी"; break;
-        case 'brother': relationshipNepali = "भाइ"; break;
-        case 'sister': relationshipNepali = "बहिनी"; break;
-        case 'husband': relationshipNepali = "पति"; break;
-        case 'wife': relationshipNepali = "पत्नी"; break;
-        default: relationshipNepali = "नाता"; break;
+        case 'father':
+            relationshipNepali = "बुवा";
+            break;
+        case 'mother':
+            relationshipNepali = "आमा";
+            break;
+        case 'son':
+            relationshipNepali = "छोरा";
+            break;
+        case 'daughter':
+            relationshipNepali = "छोरी";
+            break;
+        case 'brother':
+            relationshipNepali = "भाइ";
+            break;
+        case 'sister':
+            relationshipNepali = "बहिनी";
+            break;
+        case 'husband':
+            relationshipNepali = "पति";
+            break;
+        case 'wife':
+            relationshipNepali = "पत्नी";
+            break;
+        default:
+            relationshipNepali = "नाता";
+            break;
     }
 
     // Extract the original content for enhancement

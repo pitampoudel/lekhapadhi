@@ -50,7 +50,6 @@ export default function CreateDocPage() {
     const handleTypeChange = useCallback((type: string) => {
         setDocTypeId(type);
         setFormData(null);
-        setFormValues({});
         setFormErrors([]);
         if (type) {
             setCurrentStep(1); // Move to form step when type is selected
