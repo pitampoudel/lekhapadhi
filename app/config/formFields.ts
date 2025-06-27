@@ -9,6 +9,13 @@ export interface FormField {
 
 export const commonFields: FormField[] = [
   {
+    id: 'documentName',
+    label: 'कागजातको नाम',
+    type: 'text',
+    placeholder: 'कागजातको नाम लेख्नुहोस्',
+    required: true
+  },
+  {
     id: 'fullName',
     label: 'पूरा नाम',
     type: 'text',

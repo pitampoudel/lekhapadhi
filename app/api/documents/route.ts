@@ -54,13 +54,12 @@ export async function POST(request: Request) {
         const publicUrl = `/documents/${filename}`;
 
         const document: Document = {
-            title: `${docType} Document`,
+            title: formData.documentName || `${docType} Document`, // Use user-provided name or fallback to auto-generated
             type: docType,
             status: DocumentStatus.CREATED,
             userEmail,
             createdAt: new Date().toISOString(),
-            publicUrl,
-            srcUrl: publicUrl
+            publicUrl
         };
 
         const createdDocument = await createDocument(document);
