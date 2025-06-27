@@ -41,9 +41,6 @@ export async function uploadToGCS(
     },
   });
   
-  // Make the file publicly accessible
-  await file.makePublic();
-  
   // Return the public URL
   return `https://storage.googleapis.com/${bucketName}/${uniqueFileName}`;
 }
