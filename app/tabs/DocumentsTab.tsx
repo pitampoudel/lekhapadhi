@@ -1,7 +1,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {Document} from "@/lib/types/document";
-import {DocumentRow, DocumentsHeader} from "@/app/tabs/components";
+import DocumentRow from "@/app/tabs/DocumentRow";
 
 
 export default function DocumentsTab() {
@@ -48,13 +48,10 @@ export default function DocumentsTab() {
                     <p className="mb-4">No documents found. Create your first document from the Create tab.</p>
                 </div>
             ) : (
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <DocumentsHeader/>
-                        <tbody className="bg-theme-card divide-y divide-gray-200">
-                        {documents.map((document) => <DocumentRow key={document._id} document={document}/>)}
-                        </tbody>
-                    </table>
+                <div className="flex flex-col space-y-3">
+                    {documents.map((document) => (
+                        <DocumentRow key={document._id} document={document}/>
+                    ))}
                 </div>
             )}
         </div>

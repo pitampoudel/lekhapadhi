@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {CheckCircleIcon, ChevronRightIcon, ClockIcon, FileTextIcon} from "lucide-react";
 import Card from "../components/Card";
 import {Document} from "@/lib/types/document";
-import {DocumentRow, DocumentsHeader} from "@/app/tabs/components";
+import DocumentRow from "@/app/tabs/DocumentRow";
 
 type OverviewTabProps = {
     setActiveTab: (tab: string) => void;
@@ -44,12 +44,12 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(currentDate.getMonth() - 1);
 
-    const thisMonthCreated = documents.filter(doc => 
+    const thisMonthCreated = documents.filter(doc =>
         doc.status === 'Created' && new Date(doc.createdAt) > oneMonthAgo
     ).length;
 
-    const signedPercentage = documents.length > 0 
-        ? Math.round((signedCount / documents.length) * 100) 
+    const signedPercentage = documents.length > 0
+        ? Math.round((signedCount / documents.length) * 100)
         : 0;
 
     return (
@@ -101,15 +101,10 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
                         <p>No documents found. Create your first document from the Create tab.</p>
                     </div>
                 ) : (
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <DocumentsHeader/>
-                            <tbody className="bg-theme-card divide-y divide-gray-200">
-                            {documents.slice(0, 3).map((document) => (
-                                <DocumentRow key={document._id} document={document}/>
-                            ))}
-                            </tbody>
-                        </table>
+                    <div className="flex flex-col space-y-3">
+                        {documents.map((document) => (
+                            <DocumentRow key={document._id} document={document}/>
+                        ))}
                     </div>
                 )}
             </section>
