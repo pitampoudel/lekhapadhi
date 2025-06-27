@@ -14,23 +14,24 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchDocuments = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('/api/documents');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch documents');
-                }
-                const data = await response.json();
-                setDocuments(data);
-            } catch (err) {
-                console.error('Error fetching documents:', err);
-                setError('Failed to load documents. Please try again later.');
-            } finally {
-                setLoading(false);
+    const fetchDocuments = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch('/api/documents');
+            if (!response.ok) {
+                throw new Error('Failed to fetch documents');
             }
-        };
+            const data = await response.json();
+            setDocuments(data);
+        } catch (err) {
+            console.error('Error fetching documents:', err);
+            setError('Failed to load documents. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchDocuments().then(r => console.log(r));
     }, []);
 
@@ -103,7 +104,7 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
                 ) : (
                     <div className="flex flex-col space-y-3">
                         {documents.map((document) => (
-                            <DocumentRow key={document._id} document={document}/>
+                            <DocumentRow key={document._id} document={document} onDocumentDeleted={fetchDocuments}/>
                         ))}
                     </div>
                 )}

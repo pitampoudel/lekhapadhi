@@ -10,24 +10,28 @@ export default function DocumentsTab() {
     const [error, setError] = useState<string | null>(null);
 
 
-    useEffect(() => {
+    const fetchDocuments = async () => {
         try {
             setLoading(true);
-            fetch('/api/documents').then(res => {
-                if (!res.ok) {
-                    throw new Error('Failed to fetch documents');
-                }
-                res.json().then((data) => {
-                    console.log(data);
-                    setDocuments(data);
-                })
-            });
+            setDocuments([]);
+            setError(null);
+            const res = await fetch('/api/documents');
+            if (!res.ok) {
+                throw new Error('Failed to fetch documents');
+            }
+            const data = await res.json();
+            console.log(data);
+            setDocuments(data);
         } catch (err) {
             console.error('Error fetching documents:', err);
             setError('Failed to load documents. Please try again later.');
         } finally {
             setLoading(false);
         }
+    };
+
+    useEffect(() => {
+        fetchDocuments();
     }, []);
 
 
@@ -50,7 +54,11 @@ export default function DocumentsTab() {
             ) : (
                 <div className="flex flex-col space-y-3">
                     {documents.map((document) => (
-                        <DocumentRow key={document._id} document={document}/>
+                        <DocumentRow 
+                            key={document._id} 
+                            document={document}
+                            onDocumentDeleted={fetchDocuments}
+                        />
                     ))}
                 </div>
             )}

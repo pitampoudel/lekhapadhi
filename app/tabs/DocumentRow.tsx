@@ -2,11 +2,46 @@ import {Document} from "@/lib/types/document";
 import React from "react";
 import {SignatureRequestModal} from "@/app/tabs/dialogs";
 
-export default function DocumentRow({document}: { document: Document }) {
+interface DocumentRowProps {
+    document: Document;
+    onDocumentDeleted?: () => void;
+}
+
+export default function DocumentRow({document, onDocumentDeleted}: DocumentRowProps) {
     const [showSignatureModal, setShowSignatureModal] = React.useState(false);
+    const [isDeleting, setIsDeleting] = React.useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
     const handleRequestSignature = () => {
         setShowSignatureModal(true);
+    };
+
+    const handleDeleteDocument = async () => {
+        if (!document._id) return;
+
+        setIsDeleting(true);
+        try {
+            const response = await fetch(`/api/documents/${document._id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to delete document');
+            }
+
+            // Call the callback to refresh the document list
+            if (onDocumentDeleted) {
+                onDocumentDeleted();
+            }
+
+            setShowDeleteConfirm(false);
+        } catch (error) {
+            console.error('Error deleting document:', error);
+            alert(`Failed to delete document: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     // Status badge styling
@@ -175,6 +210,19 @@ export default function DocumentRow({document}: { document: Document }) {
                         </svg>
                         COPY LINK
                     </button>
+
+                    <button
+                        onClick={() => setShowDeleteConfirm(true)}
+                        disabled={isDeleting}
+                        className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white px-3 py-1 rounded-md transition-colors cursor-pointer flex items-center text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Delete this document">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        {isDeleting ? 'DELETING...' : 'DELETE'}
+                    </button>
                 </div>
             </div>
 
@@ -183,6 +231,42 @@ export default function DocumentRow({document}: { document: Document }) {
                     document={document}
                     onClose={() => setShowSignatureModal(false)}
                 />
+            )}
+
+            {/* Delete Confirmation Dialog */}
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+                        <div className="flex items-center mb-4">
+                            <svg className="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                Delete Document
+                            </h3>
+                        </div>
+                        <p className="text-gray-600 dark:text-gray-300 mb-6">
+                            Are you sure you want to delete &#34;{document.title}&#34;? This action cannot be undone and will permanently remove the document and all associated files.
+                        </p>
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                disabled={isDeleting}
+                                className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDeleteDocument}
+                                disabled={isDeleting}
+                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isDeleting ? 'Deleting...' : 'Delete'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
