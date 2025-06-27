@@ -111,7 +111,7 @@ export default function CreateDocPage() {
         <div className="min-h-screen flex flex-col justify-center items-center p-4 md:p-8 relative">
             <button
                 onClick={handleClose}
-                className="absolute top-4 right-4 p-2 rounded-full text-theme-gray-700 hover:text-theme-gray-900  transition-all focus:outline-none focus:ring-2 focus:ring-theme-primary-600 cursor-pointer"
+                className="fixed top-4 right-4 p-2 rounded-full text-theme-gray-700 hover:text-theme-gray-900 transition-all focus:outline-none focus:ring-2 focus:ring-theme-primary-600 cursor-pointer z-20"
                 aria-label="Close form"
             >
                 <XIcon className="w-6 h-6"/>
@@ -119,13 +119,15 @@ export default function CreateDocPage() {
 
             <div className="w-full max-w-4xl">
                 {/* Stepper */}
-                <div className="mb-16" role="navigation" aria-label="Form steps">
+                <div className="fixed top-0 left-0 right-0 bg-theme-content z-10 pt-6 pb-16 shadow-md" role="navigation" aria-label="Form steps">
                     <Stepper
                         steps={steps}
                         currentStep={currentStep}
                         onStepClick={handleStepClick}
                     />
                 </div>
+                {/* Spacer to prevent content from being hidden behind fixed stepper */}
+                <div className="mb-40"></div>
 
                 {/* Form errors */}
                 {formErrors.length > 0 && (
