@@ -26,13 +26,13 @@ export async function uploadToGCS(
 ): Promise<string> {
   // Create a unique file name to avoid collisions
   const uniqueFileName = `${fileName.split('.')[0]}_${uuidv4()}.${fileName.split('.').pop()}`;
-  
+
   // Get a reference to the bucket
   const bucket = storage.bucket(bucketName);
-  
+
   // Create a file object
   const file = bucket.file(uniqueFileName);
-  
+
   // Upload the file
   await file.save(fileBuffer, {
     contentType,
@@ -40,7 +40,7 @@ export async function uploadToGCS(
       cacheControl: 'public, max-age=31536000',
     },
   });
-  
+
   // Return the public URL
   return `https://storage.googleapis.com/${bucketName}/${uniqueFileName}`;
 }
@@ -53,15 +53,46 @@ export async function uploadToGCS(
 export async function downloadFromGCS(fileUrl: string): Promise<Buffer> {
   // Extract the file name from the URL
   const fileName = fileUrl.split('/').pop() || '';
-  
+
   // Get a reference to the bucket
   const bucket = storage.bucket(bucketName);
-  
+
   // Get a reference to the file
   const file = bucket.file(fileName);
-  
+
   // Download the file
   const [fileContent] = await file.download();
-  
+
   return fileContent;
+}
+
+/**
+ * Delete a file from Google Cloud Storage
+ * @param fileUrl - The URL of the file to delete
+ * @returns Promise<boolean> - True if deletion was successful
+ */
+export async function deleteFromGCS(fileUrl: string): Promise<boolean> {
+  try {
+    // Extract the file name from the URL
+    const fileName = fileUrl.split('/').pop() || '';
+
+    if (!fileName) {
+      console.error('Invalid file URL provided for deletion:', fileUrl);
+      return false;
+    }
+
+    // Get a reference to the bucket
+    const bucket = storage.bucket(bucketName);
+
+    // Get a reference to the file
+    const file = bucket.file(fileName);
+
+    // Delete the file
+    await file.delete();
+
+    return true;
+  } catch (error) {
+    console.error('Error deleting file from GCS:', error);
+    return false;
+  }
 }

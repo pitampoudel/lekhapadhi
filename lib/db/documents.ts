@@ -77,3 +77,12 @@ export async function uploadSignedDocument(documentId: string, signedDocumentUrl
         signedDocumentUrl
     });
 }
+
+export async function deleteDocument(id: string): Promise<boolean> {
+    const collection = await getCollection();
+    const result = await collection.deleteOne(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { _id: new ObjectId(id) } as any
+    );
+    return result.deletedCount > 0;
+}
