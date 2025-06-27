@@ -144,7 +144,7 @@ async function createStandardDocument(
             alignment: docx.AlignmentType.CENTER,
             children: [
                 new docx.TextRun({
-                    text: "══════════════════════════════════════════",
+                    text: "═════════════════════════════════════════════════════════════════════",
                     bold: true,
                 }),
             ],
