@@ -58,7 +58,7 @@ function createPromptForDocType(docType: string, content: string, formData: Form
     4. Maintains the original meaning and intent
     5. Follows standard Nepali official document format
 
-    Return ONLY the enhanced content in Nepali, without any explanations or notes.
+    Return ONLY the enhanced content in Nepali, without any explanations, notes, or subject line.
   `;
 
   // Add specific instructions based on document type
