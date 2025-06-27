@@ -9,10 +9,13 @@ import {docTypes} from "@/app/config/docTypes";
 import {FormData} from "@/lib/types/formData";
 import FormStep from "./FormStep";
 import PreviewStep from "./PreviewStep";
+import FileUploadStep from "./FileUploadStep";
+import ModeSelector from "./ModeSelector";
 
 
 export default function CreateDocPage() {
     const router = useRouter();
+    const [creationMode, setCreationMode] = useState<'template' | 'upload' | ''>('');
     const [docTypeId, setDocTypeId] = useState<string>('');
     const [formData, setFormData] = useState<FormData | null>(null);
     const [currentStep, setCurrentStep] = useState<number>(0);
@@ -27,24 +30,46 @@ export default function CreateDocPage() {
     // Define steps for the form process
     const steps: Step[] = [
         {
-            id: 'select-type',
-            title: 'प्रकार छान्नुहोस्',
-            description: 'सिफारिसको प्रकार'
+            id: 'select-mode',
+            title: 'Creation Mode',
+            description: 'Choose how to create'
         },
-        {
-            id: 'fill-form',
-            title: 'विवरण भर्नुहोस्',
-            description: 'आवश्यक जानकारी'
-        },
-        {
-            id: 'preview',
-            title: 'प्रिभ्यू',
-            description: 'कागजात हेर्नुहोस्'
-        }
+        ...(creationMode === 'template' ? [
+            {
+                id: 'select-type',
+                title: 'प्रकार छान्नुहोस्',
+                description: 'सिफारिसको प्रकार'
+            },
+            {
+                id: 'fill-form',
+                title: 'विवरण भर्नुहोस्',
+                description: 'आवश्यक जानकारी'
+            },
+            {
+                id: 'preview',
+                title: 'प्रिभ्यू',
+                description: 'कागजात हेर्नुहोस्'
+            }
+        ] : creationMode === 'upload' ? [
+            {
+                id: 'upload-file',
+                title: 'Upload Document',
+                description: 'Upload your file'
+            }
+        ] : [])
     ];
 
     // Get the selected document type details
     const selectedDocType = docTypes.find(typ => typ.id === docTypeId);
+
+    // Handler for creation mode selection
+    const handleModeChange = useCallback((mode: 'template' | 'upload') => {
+        setCreationMode(mode);
+        setDocTypeId('');
+        setFormData(null);
+        setFormErrors([]);
+        setCurrentStep(1); // Move to next step when mode is selected
+    }, []);
 
     // Handler for document type selection
     const handleTypeChange = useCallback((type: string) => {
@@ -52,9 +77,15 @@ export default function CreateDocPage() {
         setFormData(null);
         setFormErrors([]);
         if (type) {
-            setCurrentStep(1); // Move to form step when type is selected
+            setCurrentStep(2); // Move to form step when type is selected (step 2 in template mode)
         }
     }, []);
+
+    // Handler for upload success
+    const handleUploadSuccess = useCallback((document: any) => {
+        // Redirect to the uploaded document or back to dashboard
+        router.push('/');
+    }, [router]);
 
     // Handler for form field changes
     const handleFieldChange = useCallback((id: string, value: string) => {
@@ -85,7 +116,7 @@ export default function CreateDocPage() {
 
             // Convert Record<string, string> to FormData
             setFormData(data as unknown as FormData);
-            setCurrentStep(2); // Move to preview step when form is submitted
+            setCurrentStep(3); // Move to preview step when form is submitted (step 3 in template mode)
         } catch (error) {
             console.error('Form submission error:', error);
             setFormErrors(['फारम पेश गर्दा त्रुटि भयो। कृपया पुन: प्रयास गर्नुहोस्।']);
@@ -99,11 +130,12 @@ export default function CreateDocPage() {
         // Only allow going back to previous steps or to the next step if current step is complete
         if (stepIndex < currentStep ||
             (stepIndex === currentStep + 1 &&
-                ((currentStep === 0 && docTypeId) ||
-                    (currentStep === 1 && formData)))) {
+                ((currentStep === 0 && creationMode) ||
+                    (currentStep === 1 && creationMode === 'template' && docTypeId) ||
+                    (currentStep === 2 && creationMode === 'template' && formData)))) {
             setCurrentStep(stepIndex);
         }
-    }, [currentStep, docTypeId, formData]);
+    }, [currentStep, creationMode, docTypeId, formData]);
 
 
     return (
@@ -118,7 +150,8 @@ export default function CreateDocPage() {
 
             <div className="w-full max-w-4xl">
                 {/* Stepper */}
-                <div className="fixed top-0 left-0 right-0 bg-theme-content z-10 pt-6 pb-16 shadow-md" role="navigation" aria-label="Form steps">
+                <div className="fixed top-0 left-0 right-0 bg-theme-content z-10 pt-6 pb-16 shadow-md" role="navigation"
+                     aria-label="Form steps">
                     <Stepper
                         steps={steps}
                         currentStep={currentStep}
@@ -143,68 +176,88 @@ export default function CreateDocPage() {
 
                 {/* Step-based UI */}
                 <div className="w-full flex justify-center mt-2">
-                    {/* Step 1: Document Type Selection */}
+                    {/* Step 0: Mode Selection */}
                     {currentStep === 0 && (
                         <div className="w-full">
-                            <DocumentTypeSelector
-                                selectedType={docTypeId}
-                                onTypeChange={handleTypeChange}
-                            />
+                            <ModeSelector onModeSelect={handleModeChange}/>
                         </div>
                     )}
 
-                    {/* Step 2: Form Filling */}
-                    {currentStep === 1 && (
-                        <FormStep
-                            docTypeId={docTypeId}
-                            selectedDocType={selectedDocType}
-                            formValues={formValues}
-                            handleFieldChange={handleFieldChange}
-                            handleFormSubmit={handleFormSubmit}
-                            getFieldsByType={getFieldsByType}
-                            formErrors={formErrors}
-                            isSubmitting={isSubmitting}
-                        />
+                    {/* Template Creation Workflow */}
+                    {creationMode === 'template' && (
+                        <>
+                            {/* Step 1: Document Type Selection */}
+                            {currentStep === 1 && (
+                                <div className="w-full">
+                                    <DocumentTypeSelector
+                                        selectedType={docTypeId}
+                                        onTypeChange={handleTypeChange}
+                                    />
+                                </div>
+                            )}
+
+                            {/* Step 2: Form Filling */}
+                            {currentStep === 2 && (
+                                <FormStep
+                                    docTypeId={docTypeId}
+                                    selectedDocType={selectedDocType}
+                                    formValues={formValues}
+                                    handleFieldChange={handleFieldChange}
+                                    handleFormSubmit={handleFormSubmit}
+                                    getFieldsByType={getFieldsByType}
+                                    formErrors={formErrors}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
+
+                            {/* Step 3: Preview */}
+                            {currentStep === 3 && formData && (
+                                <PreviewStep
+                                    docTypeId={docTypeId}
+                                    selectedDocType={selectedDocType}
+                                    formData={formData as unknown as Record<string, string>}
+                                    getFieldsByType={getFieldsByType}
+                                    onBack={() => setCurrentStep(2)}
+                                    onSubmit={async () => {
+                                        setIsSubmitting(true);
+                                        try {
+                                            const response = await fetch('/api/documents', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                body: JSON.stringify({
+                                                    docType: docTypeId,
+                                                    formData
+                                                }),
+                                            });
+
+                                            if (!response.ok) {
+                                                throw new Error('Failed to create document');
+                                            }
+
+                                            const result = await response.json();
+                                            router.push(result.publicUrl);
+                                            router.push("/");
+                                        } catch (error) {
+                                            console.error('Error creating document:', error);
+                                            setFormErrors(['कागजात सिर्जना गर्दा त्रुटि भयो। कृपया पुन: प्रयास गर्नुहोस्।']);
+                                            setCurrentStep(2);
+                                        } finally {
+                                            setIsSubmitting(false);
+                                        }
+                                    }}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
+                        </>
                     )}
 
-                    {/* Step 3: Preview */}
-                    {currentStep === 2 && formData && (
-                        <PreviewStep
-                            docTypeId={docTypeId}
-                            selectedDocType={selectedDocType}
-                            formData={formData as unknown as Record<string, string>}
-                            getFieldsByType={getFieldsByType}
-                            onBack={() => setCurrentStep(1)}
-                            onSubmit={async () => {
-                                setIsSubmitting(true);
-                                try {
-                                    const response = await fetch('/api/documents', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({
-                                            docType: docTypeId,
-                                            formData
-                                        }),
-                                    });
-
-                                    if (!response.ok) {
-                                        throw new Error('Failed to create document');
-                                    }
-
-                                    const result = await response.json();
-                                    router.push(result.publicUrl);
-                                    router.push("/");
-                                } catch (error) {
-                                    console.error('Error creating document:', error);
-                                    setFormErrors(['कागजात सिर्जना गर्दा त्रुटि भयो। कृपया पुन: प्रयास गर्नुहोस्।']);
-                                    setCurrentStep(1);
-                                } finally {
-                                    setIsSubmitting(false);
-                                }
-                            }}
-                            isSubmitting={isSubmitting}
+                    {/* File Upload Workflow */}
+                    {creationMode === 'upload' && currentStep === 1 && (
+                        <FileUploadStep
+                            onUploadSuccess={handleUploadSuccess}
+                            onBack={() => setCurrentStep(0)}
                         />
                     )}
                 </div>
