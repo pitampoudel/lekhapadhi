@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.16.0",
     "@google/generative-ai": "^0.2.1",
     "@hookform/resolvers": "^5.1.1",
     "docx": "^8.5.0",

@@ -2,11 +2,10 @@ import {NextResponse} from 'next/server';
 import {auth} from '@/auth';
 import {createDocument, getDocumentsByUser} from '@/lib/db/documents';
 import {Document, DocumentStatus} from '@/lib/types/document';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as docx from 'docx';
 import {v4 as uuidv4} from 'uuid';
 import generateWordDocument from "@/lib/docx";
+import { uploadToGCS } from '@/lib/storage';
 
 export async function GET() {
     try {
@@ -38,20 +37,13 @@ export async function POST(request: Request) {
 
         const filename = `${docType.toLowerCase()}_${uuidv4()}.docx`;
 
-        const publicDir = path.join(process.cwd(), 'public');
-        const documentsDir = path.join(publicDir, 'documents');
-
-        if (!fs.existsSync(documentsDir)) {
-            fs.mkdirSync(documentsDir, {recursive: true});
-        }
-
         const doc = await generateWordDocument(docType, formData);
 
-        const filePath = path.join(documentsDir, filename);
+        // Convert document to buffer
         const buffer = await docx.Packer.toBuffer(doc);
-        fs.writeFileSync(filePath, buffer);
 
-        const publicUrl = process.env.NEXT_PUBLIC_BASE_URL + `/documents/${filename}`;
+        // Upload to Google Cloud Storage
+        const publicUrl = await uploadToGCS(buffer, filename, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 
         const document: Document = {
             title: formData.documentName || `${docType} Document`, // Use user-provided name or fallback to auto-generated

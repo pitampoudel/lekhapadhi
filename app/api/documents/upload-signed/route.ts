@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { uploadSignedDocument } from '@/lib/db/documents';
-import * as fs from 'fs';
-import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { uploadToGCS } from '@/lib/storage';
 
 export async function POST(request: Request) {
     try {
@@ -37,24 +36,14 @@ export async function POST(request: Request) {
             );
         }
 
-        // Create directory for signed documents if it doesn't exist
-        const publicDir = path.join(process.cwd(), 'public');
-        const signedDocsDir = path.join(publicDir, 'signed-documents');
-
-        if (!fs.existsSync(signedDocsDir)) {
-            fs.mkdirSync(signedDocsDir, { recursive: true });
-        }
-
         // Generate a unique filename
         const filename = `signed_${uuidv4()}.pdf`;
-        const filePath = path.join(signedDocsDir, filename);
 
-        // Convert file to buffer and save it
+        // Convert file to buffer
         const buffer = Buffer.from(await file.arrayBuffer());
-        fs.writeFileSync(filePath, buffer);
 
-        // Generate public URL for the signed document
-        const signedDocumentUrl = `/signed-documents/${filename}`;
+        // Upload to Google Cloud Storage
+        const signedDocumentUrl = await uploadToGCS(buffer, filename, 'application/pdf');
 
         // Update the document in the database
         await uploadSignedDocument(documentId, signedDocumentUrl);
