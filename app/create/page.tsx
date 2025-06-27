@@ -6,6 +6,7 @@ import Stepper, {Step} from '../components/input/Stepper';
 import {getFieldsByType} from "../config/formFields";
 import {useRouter} from "next/navigation";
 import {docTypes} from "@/app/config/docTypes";
+import {FormData} from "@/lib/types/formData";
 import FormStep from "./FormStep";
 import PreviewStep from "./PreviewStep";
 
@@ -13,7 +14,7 @@ import PreviewStep from "./PreviewStep";
 export default function CreateDocPage() {
     const router = useRouter();
     const [docTypeId, setDocTypeId] = useState<string>('');
-    const [formData, setFormData] = useState<any | null>(null);
+    const [formData, setFormData] = useState<FormData | null>(null);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -65,7 +66,7 @@ export default function CreateDocPage() {
     }, []);
 
     // Handler for form submission
-    const handleFormSubmit = useCallback((data: any) => {
+    const handleFormSubmit = useCallback((data: Record<string, string>) => {
         setIsSubmitting(true);
         setFormErrors([]);
 
@@ -73,7 +74,9 @@ export default function CreateDocPage() {
             // Validate required fields
             const fields = getFieldsByType(docTypeId);
             const requiredFields = fields.filter(field => field.required);
-            const missingFields = requiredFields.filter(field => !data[field.id]);
+            const missingFields = requiredFields.filter(field => {
+                return !(field.id in data && data[field.id]);
+            });
 
             if (missingFields.length > 0) {
                 setFormErrors(missingFields.map(field => `${field.label} आवश्यक छ`));
@@ -81,7 +84,8 @@ export default function CreateDocPage() {
                 return;
             }
 
-            setFormData(data);
+            // Convert Record<string, string> to FormData
+            setFormData(data as unknown as FormData);
             setCurrentStep(2); // Move to preview step when form is submitted
         } catch (error) {
             console.error('Form submission error:', error);
@@ -167,7 +171,7 @@ export default function CreateDocPage() {
                         <PreviewStep
                             docTypeId={docTypeId}
                             selectedDocType={selectedDocType}
-                            formData={formData}
+                            formData={formData as unknown as Record<string, string>}
                             getFieldsByType={getFieldsByType}
                             onBack={() => setCurrentStep(1)}
                             onSubmit={async () => {

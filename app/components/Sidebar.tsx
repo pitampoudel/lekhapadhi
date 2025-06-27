@@ -1,10 +1,19 @@
 import Link from "next/link";
 import {FileIcon, FileTextIcon, HomeIcon, LogOutIcon, UserIcon} from "lucide-react";
-import React from "react";
+import React, { ReactNode } from "react";
 import {signOut} from "next-auth/react";
 import {useRouter} from "next/navigation";
 
-const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}) => {
+interface NavItemProps {
+    icon: ReactNode;
+    label: string;
+    onClick?: (e: React.MouseEvent) => void;
+    href?: string;
+    active?: boolean;
+    closeMobileMenu?: () => void;
+}
+
+const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}: NavItemProps) => {
     const content = (
         <>
             {icon}
@@ -17,7 +26,7 @@ const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}) 
         active ? 'bg-theme-primary-600 bg-opacity-10 text-theme-primary-600' : 'text-theme-gray-600 hover:bg-theme-gray-100'
     }`;
 
-    const handleClick = (e) => {
+    const handleClick = (e: React.MouseEvent) => {
         if (onClick) onClick(e);
         if (closeMobileMenu) closeMobileMenu();
     };

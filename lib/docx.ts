@@ -1,7 +1,15 @@
 import * as docx from "docx";
 import {enhanceDocumentContent} from "./gemini";
+import { 
+    FormData, 
+    CitizenshipFormData, 
+    BirthRegistrationFormData, 
+    ResidenceFormData, 
+    MarriageFormData, 
+    RelationshipFormData 
+} from "./types/formData";
 
-export default async function generateWordDocument(docType: string, formData: any): Promise<docx.Document> {
+export default async function generateWordDocument(docType: string, formData: FormData): Promise<docx.Document> {
     // Generate a unique reference number
     const refNumber = `${Math.floor(Math.random() * 1000)}-${new Date().getFullYear()}/${new Date().getMonth() + 1}`;
 
@@ -12,15 +20,15 @@ export default async function generateWordDocument(docType: string, formData: an
     // Create document based on document type
     switch (docType) {
         case "citizenship-sifaris":
-            return await createCitizenshipRecommendation(formData, refNumber, formattedDate);
+            return await createCitizenshipRecommendation(formData as CitizenshipFormData, refNumber, formattedDate);
         case "birth-sifaris":
-            return await createBirthRegistrationRecommendation(formData, refNumber, formattedDate);
+            return await createBirthRegistrationRecommendation(formData as BirthRegistrationFormData, refNumber, formattedDate);
         case "residence-sifaris":
-            return await createResidenceRecommendation(formData, refNumber, formattedDate);
+            return await createResidenceRecommendation(formData as ResidenceFormData, refNumber, formattedDate);
         case "marriage-sifaris":
-            return await createMarriageRecommendation(formData, refNumber, formattedDate);
+            return await createMarriageRecommendation(formData as MarriageFormData, refNumber, formattedDate);
         case "relationship-certificate-sifaris":
-            return await createRelationshipRecommendation(formData, refNumber, formattedDate);
+            return await createRelationshipRecommendation(formData as RelationshipFormData, refNumber, formattedDate);
         default:
             throw new Error("Invalid docType: " + docType);
     }
@@ -29,7 +37,7 @@ export default async function generateWordDocument(docType: string, formData: an
 // Function to create a standard document with common elements
 async function createStandardDocument(
     children: docx.Paragraph[],
-    formData: any,
+    formData: FormData,
     refNumber: string,
     formattedDate: string
 ): Promise<docx.Document> {
@@ -223,7 +231,7 @@ async function createStandardDocument(
     });
 }
 
-async function createCitizenshipRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
+async function createCitizenshipRecommendation(formData: CitizenshipFormData, refNumber: string, formattedDate: string): Promise<docx.Document> {
     // Extract the original content for enhancement
     const originalContent = `प्रस्तुत विषयमा यस वडा नं. ${formData.wardNo} स्थायी ठेगाना भएका श्री ${formData.fatherName} तथा श्रीमती ${formData.motherName} को ${formData.citizenshipType === 'birthCitizenship' ? 'जन्मको आधारमा' : 'वंशजको आधारमा'} छोरा/छोरी मिति ${formData.dateOfBirth} मा जन्म भएको श्री ${formData.fullName} लाई नेपाली नागरिकताको प्रमाण-पत्र प्रदान गरिदिनुहुन सिफारिस साथ अनुरोध गर्दछु।`;
 
@@ -300,7 +308,7 @@ async function createCitizenshipRecommendation(formData: any, refNumber: string,
     return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
-async function createBirthRegistrationRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
+async function createBirthRegistrationRecommendation(formData: BirthRegistrationFormData, refNumber: string, formattedDate: string): Promise<docx.Document> {
     // Extract the original content for enhancement
     const originalContent = `प्रस्तुत विषयमा यस वडा नं. ${formData.wardNo} स्थायी ठेगाना भएका श्री ${formData.fatherName} तथा श्रीमती ${formData.motherName} को ${formData.gender === 'male' ? 'छोरा' : formData.gender === 'female' ? 'छोरी' : 'सन्तान'} श्री ${formData.fullName} को जन्म मिति ${formData.dateOfBirth} मा ${formData.birthPlace} मा भएको हुँदा निजको जन्मदर्ता गरिदिनुहुन सिफारिस साथ अनुरोध गर्दछु।`;
 
@@ -377,7 +385,7 @@ async function createBirthRegistrationRecommendation(formData: any, refNumber: s
     return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
-async function createResidenceRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
+async function createResidenceRecommendation(formData: ResidenceFormData, refNumber: string, formattedDate: string): Promise<docx.Document> {
     // Extract the original content for enhancement
     const originalContent = `प्रस्तुत विषयमा श्री ${formData.fullName}, श्री ${formData.fatherName} तथा श्रीमती ${formData.motherName} को ${formData.gender === 'male' ? 'छोरा' : formData.gender === 'female' ? 'छोरी' : 'सन्तान'}, स्थायी ठेगाना ${formData.permanentAddress} भएको व्यक्ति मिति ${formData.residingSince} देखि हालसम्म ${formData.currentAddress} मा बसोबास गर्दै आउनुभएको व्यहोरा प्रमाणित गरिन्छ।`;
 
@@ -454,7 +462,7 @@ async function createResidenceRecommendation(formData: any, refNumber: string, f
     return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
-async function createMarriageRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
+async function createMarriageRecommendation(formData: MarriageFormData, refNumber: string, formattedDate: string): Promise<docx.Document> {
     // Get marriage type in Nepali
     let marriageTypeNepali = "माग विवाह";
     if (formData.marriageType === 'love') {
@@ -539,7 +547,7 @@ async function createMarriageRecommendation(formData: any, refNumber: string, fo
     return await createStandardDocument(documentContent, formData, refNumber, formattedDate);
 }
 
-async function createRelationshipRecommendation(formData: any, refNumber: string, formattedDate: string): Promise<docx.Document> {
+async function createRelationshipRecommendation(formData: RelationshipFormData, refNumber: string, formattedDate: string): Promise<docx.Document> {
     // Get relationship type in Nepali
     let relationshipNepali = "";
     switch (formData.relationship) {

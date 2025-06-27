@@ -1,14 +1,15 @@
-import {NextResponse} from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 import {getDocumentById} from '@/lib/db/documents';
 import {auth} from '@/auth';
 
 export async function GET(
-    request: Request,
-    { params }: { params: { documentId: string } }
+    request: NextRequest,
+    { params }: { params: Promise<{ documentId: string }> }
 ) {
+    const resolvedParams = await params;
     try {
-        const documentId = params.documentId;
-        
+        const documentId = resolvedParams.documentId;
+
         if (!documentId) {
             return NextResponse.json(
                 {error: 'Document ID is required'},
@@ -18,7 +19,7 @@ export async function GET(
 
         // Get the document
         const document = await getDocumentById(documentId);
-        
+
         if (!document) {
             return NextResponse.json(
                 {error: 'Document not found'},

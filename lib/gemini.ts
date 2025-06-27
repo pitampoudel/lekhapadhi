@@ -1,4 +1,5 @@
 import {GoogleGenerativeAI} from "@google/generative-ai";
+import { FormData } from "./types/formData";
 
 // Initialize the Google Generative AI with the API key
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || "");
@@ -16,12 +17,12 @@ const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 export async function enhanceDocumentContent(
   docType: string,
   content: string,
-  formData: any
+  formData: FormData
 ): Promise<string> {
   try {
     // Create a prompt based on the document type and content
     const prompt = createPromptForDocType(docType, content, formData);
-    
+
     // Generate content using Gemini
     const result = await model.generateContent(prompt);
     const response = result.response;
@@ -36,30 +37,30 @@ export async function enhanceDocumentContent(
 /**
  * Creates a prompt for Gemini based on document type
  */
-function createPromptForDocType(docType: string, content: string, formData: any): string {
+function createPromptForDocType(docType: string, content: string, formData: FormData): string {
   // Base context for all document types
   const baseContext = `
     You are an expert in Nepali official documents and legal writing.
     You need to enhance the following document content to make it more professional, 
     formal, and comprehensive while maintaining the original meaning and intent.
     Use formal Nepali language appropriate for official documents.
-    
+
     Original content: "${content}"
-    
+
     Document type: ${docType}
-    
+
     Form data: ${JSON.stringify(formData, null, 2)}
-    
+
     Please provide an enhanced version of this content that:
     1. Uses more formal and professional language
     2. Adds appropriate legal references where relevant
     3. Makes the document more comprehensive and detailed
     4. Maintains the original meaning and intent
     5. Follows standard Nepali official document format
-    
+
     Return ONLY the enhanced content in Nepali, without any explanations or notes.
   `;
-  
+
   // Add specific instructions based on document type
   switch (docType) {
     case "citizenship-sifaris":
@@ -69,7 +70,7 @@ function createPromptForDocType(docType: string, content: string, formData: any)
         - Verification of identity and residence
         - Confirmation of eligibility criteria
       `;
-    
+
     case "birth-sifaris":
       return baseContext + `
         For birth registration recommendation, emphasize:
@@ -77,7 +78,7 @@ function createPromptForDocType(docType: string, content: string, formData: any)
         - Family information
         - Importance of timely registration
       `;
-    
+
     case "residence-sifaris":
       return baseContext + `
         For residence certificate, emphasize:
@@ -85,7 +86,7 @@ function createPromptForDocType(docType: string, content: string, formData: any)
         - Verification of address
         - Purpose of the certificate
       `;
-    
+
     case "marriage-sifaris":
       return baseContext + `
         For marriage verification, emphasize:
@@ -93,7 +94,7 @@ function createPromptForDocType(docType: string, content: string, formData: any)
         - Legal status of the marriage
         - Verification of the relationship
       `;
-    
+
     case "relationship-certificate-sifaris":
       return baseContext + `
         For relationship verification, emphasize:
@@ -101,7 +102,7 @@ function createPromptForDocType(docType: string, content: string, formData: any)
         - Verification of the relationship
         - Purpose of the certificate
       `;
-    
+
     default:
       return baseContext;
   }

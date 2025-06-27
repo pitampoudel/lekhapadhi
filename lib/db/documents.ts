@@ -24,13 +24,15 @@ export async function createDocument(document: Document): Promise<Document> {
 
 export async function getDocumentById(id: string): Promise<Document | null> {
     const collection = await getCollection();
-    return await collection.findOne({_id: new ObjectId(id)});
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return await collection.findOne({ _id: new ObjectId(id) } as any);
 }
 
 export async function updateDocument(id: string, update: Partial<Document>): Promise<boolean> {
     const collection = await getCollection();
     const result = await collection.updateOne(
-        {_id: new ObjectId(id)},
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { _id: new ObjectId(id) } as any,
         {$set: update}
     );
     return result.modifiedCount > 0;
