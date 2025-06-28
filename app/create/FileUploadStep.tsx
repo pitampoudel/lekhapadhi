@@ -1,9 +1,10 @@
 "use client";
 import React, {useRef, useState} from 'react';
 import {CheckCircleIcon, FileIcon, UploadIcon, XIcon} from 'lucide-react';
+import {Document} from "@/lib/types/document";
 
 interface FileUploadStepProps {
-    onUploadSuccess: (document: any) => void;
+    onUploadSuccess: (document: Document) => void;
     onBack: () => void;
 }
 

@@ -82,7 +82,7 @@ export default function CreateDocPage() {
     }, []);
 
     // Handler for upload success
-    const handleUploadSuccess = useCallback((document: any) => {
+    const handleUploadSuccess = useCallback(() => {
         // Redirect to the uploaded document or back to dashboard
         router.push('/');
     }, [router]);
