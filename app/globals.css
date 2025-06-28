@@ -137,7 +137,7 @@
     --primary-900: #f8fafc;
 
     /* Adjust component colors for dark mode */
-    --header-bg: var(--gray-800);
+    --header-bg: var(--gray-100);
     --footer-bg: var(--gray-900);
     --card-bg: var(--gray-100);
     --content-bg: var(--gray-50);
