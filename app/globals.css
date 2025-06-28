@@ -358,3 +358,133 @@ body {
 .bg-theme-info {
   background-color: var(--info-500);
 }
+
+/* Missing theme classes for proper light/dark mode visibility */
+
+/* Light theme background */
+.bg-theme-light {
+  background-color: var(--background);
+}
+
+/* Dark theme backgrounds */
+.bg-theme-dark-800 {
+  background-color: var(--gray-800);
+}
+
+.bg-theme-dark-700 {
+  background-color: var(--gray-700);
+}
+
+/* Primary theme backgrounds for dark mode */
+.bg-theme-primary-800 {
+  background-color: var(--primary-800);
+}
+
+/* Success theme backgrounds for dark mode */
+.bg-theme-success-800 {
+  background-color: var(--success-800);
+}
+
+/* Additional text colors for better visibility */
+.text-theme-gray-100 {
+  color: var(--gray-100);
+}
+
+.text-theme-gray-300 {
+  color: var(--gray-300);
+}
+
+.text-theme-gray-400 {
+  color: var(--gray-400);
+}
+
+/* Primary text colors for dark mode */
+.text-theme-primary-400 {
+  color: var(--primary-400);
+}
+
+/* Success text colors for dark mode */
+.text-theme-success-400 {
+  color: var(--success-400);
+}
+
+.text-theme-success-600 {
+  color: var(--success-600);
+}
+
+/* Border colors for dark mode */
+.border-theme-dark-700 {
+  border-color: var(--gray-700);
+}
+
+.border-theme-dark-600 {
+  border-color: var(--gray-600);
+}
+
+.border-theme-light {
+  border-color: var(--background);
+}
+
+/* Additional missing theme classes */
+
+/* Dark theme background for very dark areas */
+.bg-theme-dark-900 {
+  background-color: var(--gray-900);
+}
+
+/* Primary text color for dark mode */
+.text-theme-primary-700 {
+  color: var(--primary-700);
+}
+
+/* Hover background colors */
+.hover\:bg-theme-gray-100:hover {
+  background-color: var(--gray-100);
+}
+
+.hover\:text-theme-primary-700:hover {
+  color: var(--primary-700);
+}
+
+/* Opacity utility classes for better visibility */
+.bg-opacity-10 {
+  --tw-bg-opacity: 0.1;
+}
+
+.bg-opacity-20 {
+  --tw-bg-opacity: 0.2;
+}
+
+.bg-opacity-30 {
+  --tw-bg-opacity: 0.3;
+}
+
+/* Dark mode opacity variants */
+.dark\:bg-opacity-20:is(.dark *) {
+  --tw-bg-opacity: 0.2;
+}
+
+.dark\:bg-opacity-30:is(.dark *) {
+  --tw-bg-opacity: 0.3;
+}
+
+/* Enhanced background colors with opacity support */
+.bg-theme-primary-600.bg-opacity-10 {
+  background-color: rgba(37, 99, 235, 0.1);
+}
+
+.bg-theme-success-600.bg-opacity-10 {
+  background-color: rgba(22, 163, 74, 0.1);
+}
+
+.bg-theme-primary-800.dark\:bg-opacity-20:is(.dark *) {
+  background-color: rgba(239, 246, 255, 0.2);
+}
+
+.bg-theme-primary-800.dark\:bg-opacity-30:is(.dark *) {
+  background-color: rgba(239, 246, 255, 0.3);
+}
+
+.bg-theme-success-800.dark\:bg-opacity-30:is(.dark *) {
+  background-color: rgba(22, 101, 52, 0.3);
+}
