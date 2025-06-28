@@ -57,6 +57,10 @@ function createPromptForDocType(docType: string, content: string, formData: Form
     3. Makes the document more comprehensive and detailed
     4. Maintains the original meaning and intent
     5. Follows standard Nepali official document format
+    6. CRITICAL: Ensures the content is concise and fits within ONE PAGE when printed (approximately 400-500 words maximum)
+    7. Prioritizes clarity and brevity while maintaining formality
+
+    IMPORTANT: The enhanced content must be brief enough to fit on a single page when combined with the document header, footer, and formatting. Keep the content focused and avoid unnecessary elaboration.
 
     Return ONLY the enhanced content in Nepali, without any explanations, notes, or subject line.
   `;
