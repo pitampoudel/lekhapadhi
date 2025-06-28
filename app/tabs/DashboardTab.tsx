@@ -91,15 +91,15 @@ export default function DashboardTab({setActiveTab}: OverviewTabProps) {
                 </div>
                 {loading ? (
                     <div className="text-center py-4">
-                        <p>Loading documents...</p>
+                        <p className="text-theme-secondary">Loading documents...</p>
                     </div>
                 ) : error ? (
-                    <div className="text-center py-4 text-red-500">
-                        <p>{error}</p>
+                    <div className="text-center py-4">
+                        <p className="text-theme-error">{error}</p>
                     </div>
                 ) : documents.length === 0 ? (
                     <div className="text-center py-4">
-                        <p>No documents found. Create your first document from the Create tab.</p>
+                        <p className="text-theme-secondary">No documents found. Create your first document from the Create tab.</p>
                     </div>
                 ) : (
                     <div className="flex flex-col space-y-3">

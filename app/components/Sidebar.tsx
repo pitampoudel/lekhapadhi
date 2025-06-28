@@ -23,7 +23,7 @@ const NavItem = ({icon, label, onClick, href, active = false, closeMobileMenu}: 
     );
 
     const baseClasses = `relative cursor-pointer flex items-center gap-3 py-2 px-3 rounded-md text-left transition-colors ${
-        active ? 'bg-theme-primary-600 bg-opacity-10 text-theme-primary-600' : 'text-theme-gray-600 hover:bg-theme-gray-100'
+        active ? 'bg-theme-primary-50 text-theme-primary-600' : 'text-theme-secondary hover:bg-theme-gray-100'
     }`;
 
     const handleClick = (e: React.MouseEvent) => {

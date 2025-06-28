@@ -10,24 +10,24 @@ type CardProps = {
 
 export default function Card({title, value, icon, trend, color = 'blue'}: CardProps) {
     const colorClasses = {
-        blue: 'bg-theme-primary-600 bg-opacity-10 border-theme-primary-600 border-opacity-20',
-        green: 'bg-theme-success-600 bg-opacity-10 border-theme-success-600 border-opacity-20',
-        amber: 'bg-amber-50 border-amber-200', // Keeping amber as is since no theme equivalent
-        red: 'bg-theme-error bg-opacity-10 border-theme-error border-opacity-20'
+        blue: 'bg-theme-primary-50 border-theme-primary-200',
+        green: 'bg-theme-success border-theme-success',
+        amber: 'bg-theme-warning border-theme-warning',
+        red: 'bg-theme-error border-theme-error'
     };
 
     const textColorClasses = {
-        blue: 'text-theme-primary-600',
-        green: 'text-theme-success-600',
-        amber: 'text-amber-800', // Keeping amber as is since no theme equivalent
-        red: 'text-theme-error'
+        blue: 'text-theme-primary',
+        green: 'text-theme-primary',
+        amber: 'text-theme-primary',
+        red: 'text-theme-primary'
     };
 
     const trendColorClasses = {
-        blue: 'text-theme-primary-600',
-        green: 'text-theme-success-600',
-        amber: 'text-amber-600', // Keeping amber as is since no theme equivalent
-        red: 'text-theme-error'
+        blue: 'text-theme-secondary',
+        green: 'text-theme-secondary',
+        amber: 'text-theme-secondary',
+        red: 'text-theme-secondary'
     };
 
     return (

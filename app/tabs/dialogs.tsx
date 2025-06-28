@@ -53,40 +53,40 @@ export function SignatureRequestModal({document, onClose}: SignatureRequestModal
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-theme-light dark:bg-theme-dark-800 rounded-lg p-6 w-full max-w-md">
-                <h2 className="text-xl font-semibold text-theme-gray-900 dark:text-theme-gray-100 mb-4">Request Signature</h2>
+            <div className="bg-theme-card rounded-lg p-6 w-full max-w-md">
+                <h2 className="text-xl font-semibold text-theme-primary mb-4">Request Signature</h2>
 
                 <form onSubmit={handleSubmit}>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-theme-gray-600 dark:text-theme-gray-400 mb-1">
+                        <label className="block text-sm font-medium text-theme-secondary mb-1">
                             Signer&#39;s Email
                         </label>
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 border border-theme-gray-200 dark:border-theme-dark-700 rounded-md bg-theme-light dark:bg-theme-dark-800 text-theme-gray-900 dark:text-theme-gray-100"
+                            className="w-full px-3 py-2 border border-theme-gray-300 rounded-md bg-theme-content text-theme-primary focus:border-theme-primary focus:ring-theme-primary"
                             placeholder="Enter email"
                             required
                         />
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-theme-gray-600 dark:text-theme-gray-400 mb-1">
+                        <label className="block text-sm font-medium text-theme-secondary mb-1">
                             Message (Optional)
                         </label>
                         <textarea
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            className="w-full px-3 py-2 border border-theme-gray-200 dark:border-theme-dark-700 rounded-md bg-theme-light dark:bg-theme-dark-800 text-theme-gray-900 dark:text-theme-gray-100"
+                            className="w-full px-3 py-2 border border-theme-gray-300 rounded-md bg-theme-content text-theme-primary focus:border-theme-primary focus:ring-theme-primary"
                             placeholder="Add a message for the signer"
                             rows={3}
                         />
                     </div>
 
                     {error && (
-                        <div className="mb-4 text-theme-error-500 dark:text-theme-error-400 text-sm">
+                        <div className="mb-4 text-theme-error text-sm">
                             {error}
                         </div>
                     )}
@@ -95,14 +95,14 @@ export function SignatureRequestModal({document, onClose}: SignatureRequestModal
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 border border-theme-gray-200 dark:border-theme-dark-700 rounded-md text-theme-gray-700 dark:text-theme-gray-300 bg-theme-light dark:bg-theme-dark-800"
+                            className="px-4 py-2 border border-theme-gray-300 rounded-md text-theme-secondary bg-theme-content hover:bg-theme-gray-100"
                             disabled={isSubmitting}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-theme-primary-600 dark:bg-theme-primary-700 text-theme-light rounded-md hover:bg-theme-primary-700 dark:hover:bg-theme-primary-800"
+                            className="px-4 py-2 bg-theme-primary-600 text-theme-light rounded-md hover:bg-theme-primary-700 transition-colors"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? 'Sending...' : 'Send Request'}
