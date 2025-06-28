@@ -39,7 +39,7 @@ export async function sendSignatureRequestEmail(
       <p>Please review the attached document, sign it, and upload the signed version using the button below:</p>
       <div style="margin: 20px 0;">
         <a href="${uploadUrl}" style="background-color: #4CAF50; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;">
-          UPLOAD SIGNED DOCUMENT
+          SIGN DOCUMENT
         </a>
       </div>
       <p>Thank you!</p>

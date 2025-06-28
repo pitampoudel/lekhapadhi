@@ -132,7 +132,7 @@ export default function UploadSignedDocumentPage({ params }: { params: { documen
     <div className="min-h-screen bg-theme-light dark:bg-theme-dark-900 flex items-center justify-center p-4">
       <div className="bg-theme-card dark:bg-theme-dark-800 rounded-lg shadow-lg p-6 w-full max-w-md">
         <h1 className="text-2xl font-bold text-theme-gray-900 dark:text-theme-gray-100 mb-6">
-          Upload Signed Document
+          Sign Document
         </h1>
 
         {success ? (
